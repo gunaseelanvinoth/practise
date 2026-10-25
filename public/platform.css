@@ -1780,3 +1780,204 @@ textarea:focus-visible {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ═══ Hover popup for question tiles ═══ */
+#q-hover-popup {
+  position: fixed;
+  z-index: 500;
+  width: 230px;
+  background: linear-gradient(145deg, #12163a, #0a0e25);
+  border: 1px solid rgba(139,111,255,0.4);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 30px rgba(139,111,255,0.15);
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(6px) scale(0.96);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+#q-hover-popup.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: all;
+}
+.qhp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.qhp-id {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--violet);
+}
+.qhp-status {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+}
+.qhp-ring {
+  display: flex;
+  justify-content: center;
+  margin: 8px 0;
+}
+.qhp-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 10px;
+}
+.qhp-stat {
+  text-align: center;
+  padding: 8px;
+  border: 1px solid rgba(139,111,255,0.15);
+  border-radius: 9px;
+  background: rgba(139,111,255,0.06);
+}
+.qhp-stat b {
+  display: block;
+  font-family: var(--head);
+  font-size: 18px;
+  color: var(--text);
+}
+.qhp-stat span {
+  font-size: 9px;
+  color: var(--muted);
+  font-family: var(--mono);
+  letter-spacing: 0.06em;
+}
+.qhp-hint {
+  text-align: center;
+  font-size: 10px;
+  color: var(--dim);
+  margin: 10px 0 0;
+  font-family: var(--mono);
+}
+
+/* ═══ Question candidate row — mini ring in summary ═══ */
+.question-candidate-row summary {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  cursor: pointer;
+  list-style: none;
+}
+.question-candidate-row summary::-webkit-details-marker { display: none; }
+
+/* ═══ Review card improvements ═══ */
+.review-progress-row {
+  display: flex;
+  gap: 16px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+.review-qmap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 14px;
+  padding: 14px;
+  background: rgba(6,8,16,0.5);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.rqm-tile {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  position: relative;
+}
+.rqm-tile:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(139,111,255,0.25); }
+.rqm-num {
+  font-family: var(--mono);
+  font-size: 10px;
+  line-height: 1;
+}
+.rqm-pct {
+  font-family: var(--mono);
+  font-size: 7px;
+  line-height: 1;
+  margin-top: 2px;
+}
+.rqm-empty  { background: rgba(6,8,16,0.6); color: var(--dim); }
+.rqm-saved  { background: rgba(139,111,255,0.12); border-color: rgba(139,111,255,0.4); color: var(--violet); }
+.rqm-submitted { background: rgba(62,234,173,0.12); border-color: rgba(62,234,173,0.4); color: var(--green); }
+
+/* ═══ Answer review — fix collapsing ═══ */
+.answer-review-wrap {
+  margin-bottom: 10px;
+}
+.answer-review {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: visible;
+  background: rgba(10,14,32,0.55);
+}
+.answer-review summary {
+  cursor: pointer;
+  padding: 14px 16px;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  border-radius: 12px;
+}
+.answer-review summary::-webkit-details-marker { display: none; }
+.answer-review summary::before {
+  content: '▶';
+  font-size: 9px;
+  color: var(--violet);
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+details[open] .answer-review summary::before { transform: rotate(90deg); }
+
+.ar-title { font-weight: 600; color: var(--text); font-size: 13px; flex: 1; min-width: 120px; }
+.ar-lang  { font-family: var(--mono); font-size: 10px; color: var(--muted); }
+.ar-state { font-family: var(--mono); font-size: 9px; letter-spacing: 0.06em; padding: 3px 8px; border-radius: 20px; }
+.ar-submitted { color: var(--green); background: rgba(62,234,173,0.1); border: 1px solid rgba(62,234,173,0.3); }
+.ar-draft     { color: var(--amber); background: rgba(255,204,92,0.1);  border: 1px solid rgba(255,204,92,0.3); }
+.ar-score { font-family: var(--mono); font-size: 10px; color: var(--violet); }
+.ar-ring  { display: flex; align-items: center; flex-shrink: 0; }
+
+.answer-review-body {
+  padding: 0 16px 16px;
+  border-top: 1px solid var(--border);
+}
+
+/* ═══ Candidate review card header ═══ */
+.review-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+.review-card-head h3 {
+  font-family: var(--head);
+  font-size: 20px;
+  color: var(--text);
+  margin: 6px 0 4px;
+}
+
+/* ═══ Fix: answer list stable positioning ═══ */
+#review-area {
+  position: relative;
+  z-index: 1;
+}
+.candidate-review-card {
+  position: relative;
+}

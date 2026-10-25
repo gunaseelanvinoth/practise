@@ -9,7 +9,6 @@
     }
   },
   "rewrites": [
-    { "source": "/control-room", "destination": "/platform.html" },
-    { "source": "/api/(.*)", "destination": "/api/[...path].mjs" }
+    { "source": "/control-room", "destination": "/platform.html" }
   ]
 }
