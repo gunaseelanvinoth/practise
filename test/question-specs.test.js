@@ -11,6 +11,7 @@ function oracle(id, input) {
     if (id === '1') return array.map((value, i) => `${i} -> ${value}`).join('\n');
     return `First = ${array[0]}\nLast  = ${array[n - 1]}`;
   }
+  if (id === '4') { const n = data[0], array = data.slice(1, data[0] + 1); return (array.reduce((sum, x) => sum + x, 0) / n).toFixed(6); }
   if ([3, 5, 6, 13, 17, 18, 25].includes(Number(id))) {
     const n = data[0], array = data.slice(1, n + 1);
     if (id === '3') return String(array.reduce((sum, value) => sum + value, 0));
@@ -35,6 +36,7 @@ function deliberatelyWrong(id, input) {
   const data = values(input);
   if (id === '1') return data.slice(1, data[0] + 1).map((value, i) => `${i + 1} -> ${value}`).join('\n');
   if (id === '2') { const a = data.slice(1, data[0] + 1); return `First = ${a[0]}\nLast  = ${a[data[0] - 2]}`; }
+  if (id === '4') { const n = data[0], a = data.slice(1, n + 1); return (Math.floor(a.reduce((sum, x) => sum + x, 0) / n)).toFixed(6); }
   if (id === '3') return String(data[1]);
   if (id === '5') return String(Math.min(...data.slice(1, data[0] + 1)));
   if (id === '6') return String(Math.max(...data.slice(1, data[0] + 1)));
@@ -48,8 +50,8 @@ function deliberatelyWrong(id, input) {
   return '';
 }
 
-test('each curated question has at least two visible and three question-specific hidden cases', () => {
-  assert.deepEqual(Object.keys(specs).sort((a,b)=>Number(a)-Number(b)), ['1','2','3','5','6','13','14','15','17','18','22','25']);
+test('each authored question has at least two visible and three question-specific hidden cases', () => {
+  assert.deepEqual(Object.keys(specs).sort((a,b)=>Number(a)-Number(b)), ['1','2','3','4','5','6','13','14','15','17','18','22','25']);
   for (const [id, suite] of Object.entries(specs)) {
     assert.ok(suite.sampleTests.length >= 2, `Q${id} sample count`);
     assert.ok(suite.hiddenTests.length >= 3, `Q${id} hidden count`);

@@ -8,5 +8,10 @@
     "referencePython": "import sys\n\ndata = list(map(int, sys.stdin.buffer.read().split()))\nn = data[0]\narr = data[1:1 + n]\nprint(f\"First = {arr[0]}\")\nprint(f\"Last  = {arr[n - 1]}\")\n",
     "incorrectPython": "import sys\n\ndata = list(map(int, sys.stdin.buffer.read().split()))\nn = data[0]\narr = data[1:1 + n]\nprint(f\"First = {arr[0]}\")\nprint(f\"Last  = {arr[n - 2]}\")\n",
     "mutationRationale": "The incorrect program uses n - 2 and prints the penultimate element; the hidden two-element case catches the off-by-one."
+  },
+  "4": {
+    "referencePython": "import sys\n\ndata = list(map(int, sys.stdin.buffer.read().split()))\nn = data[0]\ntotal = sum(data[1:1 + n])\nscale = 10**6\nq, r = divmod(abs(total) * scale, n)\nif 2 * r >= n:\n    q += 1\nwhole, frac = divmod(q, scale)\nsign = '-' if total < 0 and q != 0 else ''\nprint(f\"{sign}{whole}.{frac:06d}\")\n",
+    "incorrectPython": "import sys\n\ndata = list(map(int, sys.stdin.buffer.read().split()))\nn = data[0]\ntotal = sum(data[1:1 + n])\nprint(f\"{total // n:.6f}\")\n",
+    "mutationRationale": "The mutant applies integer floor division before formatting, discarding the fractional part and flooring negative averages."
   }
 }
