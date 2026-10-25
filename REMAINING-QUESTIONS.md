@@ -1,6 +1,6 @@
 # Remaining DSA questions
 
-Checkpoint snapshot: 2026-10-25. The GitHub feature branch contains executable suites for 25 of 100 questions; 75 remain. This file records the exact remaining bank IDs/titles for resumption.
+Checkpoint snapshot: 2026-10-26. The GitHub feature branch contains executable suites for 26 of 100 questions; 74 remain. This file records the exact remaining bank IDs/titles for resumption.
 
 ## Completed suite IDs
 
@@ -29,6 +29,7 @@ Checkpoint snapshot: 2026-10-25. The GitHub feature branch contains executable s
 - 23: Count all pairs with a given sum
 - 24: Find duplicates using nested loops
 - 25: Check whether the array is already sorted
+- 62: Count pairs with a given difference
 
 ## Remaining suite IDs and titles
 
@@ -68,7 +69,6 @@ Checkpoint snapshot: 2026-10-25. The GitHub feature branch contains executable s
 - 59: Check whether two arrays are anagrams
 - 60: Union and intersection of two arrays
 - 61: Find the missing number from 1 to n
-- 62: Count pairs with a given difference
 - 63: Duplicate within k positions
 - 64: Longest run of consecutive numbers
 - 65: Check whether an array contains any duplicate

@@ -170,7 +170,7 @@ Both `npm` commands explicitly opt in to external code execution. The live scrip
 
 ## ⚠️ Notes
 
-- **Question data coverage** — 25 of 100 questions (IDs 1–25) have authored input/output formats, visible samples and question-specific hidden tests. The other 75 questions remain to be authored from their actual problem statements; see `REMAINING-QUESTIONS.md`.
+- **Question data coverage** — 26 of 100 questions have authored input/output formats, visible samples and question-specific hidden tests. The other 74 questions remain to be authored; see `REMAINING-QUESTIONS.md`.
 - **Judge0 public instance** may have rate limits. For heavy use, provision your own Judge0 instance.
 - **Local data** is stored in `data/state.json` (created automatically, git-ignored).
 - **Production data** requires Upstash Redis. The platform shows a clear error if the database is not configured.

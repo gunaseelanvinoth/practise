@@ -3,6 +3,7 @@ const assert = require('node:assert/strict');
 const {
   CSV_COLUMNS,
   normalizeTestSuite,
+  mergeTestSuite,
   publicTestSuite,
   studentEvaluation,
   finalStatus,
@@ -11,7 +12,7 @@ const {
   candidateSubmission
 } = require('../lib/platform');
 
- test('preserves legacy arrays as hidden cases and keeps sample suites separate', () => {
+test('preserves legacy arrays as hidden cases and keeps sample suites separate', () => {
   const legacy = [{ input: '1', expectedOutput: 'one' }];
   assert.deepEqual(normalizeTestSuite(legacy), { sampleTests: [], hiddenTests: legacy });
   const split = normalizeTestSuite({
@@ -20,6 +21,27 @@ const {
   });
   assert.equal(split.sampleTests[0].input, '2');
   assert.equal(split.hiddenTests[0].input, '3');
+});
+
+test('restores authored visible samples when a saved suite has no sample tests', () => {
+  const defaults = {
+    sampleTests: [{ input: 'visible input', expectedOutput: 'visible output' }],
+    hiddenTests: [{ input: 'default hidden', expectedOutput: 'default output' }]
+  };
+  const savedHidden = [{ input: 'private input', expectedOutput: 'private output' }];
+  assert.deepEqual(mergeTestSuite(defaults, savedHidden), {
+    sampleTests: defaults.sampleTests,
+    hiddenTests: savedHidden
+  });
+  assert.deepEqual(mergeTestSuite(defaults, { sampleTests: [], hiddenTests: savedHidden }), {
+    sampleTests: defaults.sampleTests,
+    hiddenTests: savedHidden
+  });
+  const savedVisible = [{ input: 'custom sample', expectedOutput: 'custom output' }];
+  assert.deepEqual(mergeTestSuite(defaults, { sampleTests: savedVisible, hiddenTests: savedHidden }), {
+    sampleTests: savedVisible,
+    hiddenTests: savedHidden
+  });
 });
 
 test('student hidden-case summaries never reveal inputs or expected/actual output', () => {

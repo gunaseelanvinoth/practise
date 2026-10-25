@@ -13,7 +13,7 @@ const questionSpecs = require('./question-specs.json');
 const sets = require('./sets.json');
 const { latestLanguages, validateCases, evaluateSuite, candidateSummary, invalidateStaleEvaluation } = require('./lib/evaluation');
 const {
-  normalizeTestSuite, publicTestSuite, studentEvaluation, finalStatus,
+  normalizeTestSuite, mergeTestSuite, publicTestSuite, studentEvaluation, finalStatus,
   submissionsToCsv, createSubmission, candidateSubmission
 } = require('./lib/platform');
 
@@ -75,9 +75,10 @@ const presence = attempt => {
   return age < 15 ? 'Online' : age < 60 ? 'Idle' : 'Offline';
 };
 function testCases() {
-  return Object.fromEntries(questions.map(question => [String(question.id),
-    state.testCases[String(question.id)] ?? questionSpecs[String(question.id)] ?? { sampleTests: [], hiddenTests: [] }
-  ]));
+  return Object.fromEntries(questions.map(question => {
+    const id = String(question.id);
+    return [id, mergeTestSuite(questionSpecs[id], state.testCases[id])];
+  }));
 }
 function candidateQuestion(question, suite) {
   return {

@@ -6,7 +6,7 @@ const {
   latestLanguages, validateCases, evaluateSuite, candidateSummary, invalidateStaleEvaluation
 } = require('../lib/evaluation');
 const {
-  normalizeTestSuite, publicTestSuite, studentEvaluation, finalStatus,
+  normalizeTestSuite, mergeTestSuite, publicTestSuite, studentEvaluation, finalStatus,
   submissionsToCsv, createSubmission, candidateSubmission
 } = require('../lib/platform');
 
@@ -52,9 +52,10 @@ const getAttempt = id => command('GET', key('attempt', id)).then(parse);
 const saveAttempt = attempt => command('SET', key('attempt', attempt.id), JSON.stringify(attempt));
 const getTestCases = async () => {
   const stored = parse(await command('GET', key('test-cases'))) || {};
-  return Object.fromEntries(questions.map(question => [String(question.id),
-    stored[String(question.id)] ?? questionSpecs[String(question.id)] ?? { sampleTests: [], hiddenTests: [] }
-  ]));
+  return Object.fromEntries(questions.map(question => {
+    const id = String(question.id);
+    return [id, mergeTestSuite(questionSpecs[id], stored[id])];
+  }));
 };
 const getAllAttempts = async () => {
   const ids = await command('SMEMBERS', key('attempts'));

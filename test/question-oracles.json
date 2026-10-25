@@ -73,5 +73,10 @@
     "referencePython": "import sys\ndata = list(map(int, sys.stdin.buffer.read().split()))\nn = data[0]\na = data[1:1 + n]\nans = []\nfor i in range(n):\n    found_later = False\n    for j in range(i + 1, n):\n        if a[i] == a[j]:\n            found_later = True\n            break\n    appeared_earlier = False\n    for k in range(i):\n        if a[i] == a[k]:\n            appeared_earlier = True\n            break\n    if found_later and not appeared_earlier:\n        ans.append(str(a[i]))\nprint('\\n'.join(ans) if ans else 'None')",
     "incorrectPython": "import sys\ndata = list(map(int, sys.stdin.buffer.read().split()))\nn = data[0]\na = data[1:1 + n]\nans = []\nfor i in range(n):\n    for j in range(i + 1, n):\n        if a[i] == a[j]:\n            ans.append(str(a[i]))\n            break\nprint('\\n'.join(ans) if ans else 'None')",
     "mutationRationale": "The mutant reports a repeated value at each occurrence rather than suppressing values already reported, so values with multiple duplicates appear more than once."
+  },
+  "62": {
+    "referencePython": "import sys\nfrom collections import Counter\ndata = list(map(int, sys.stdin.buffer.read().split()))\nn = data[0]\na = data[1:1 + n]\nk = data[1 + n]\nfreq = Counter(a)\nif k == 0:\n    answer = sum(count * (count - 1) // 2 for count in freq.values())\nelse:\n    answer = sum(count * freq.get(value + k, 0) for value, count in freq.items())\nprint(answer)\n",
+    "incorrectPython": "import sys\ndata = list(map(int, sys.stdin.buffer.read().split()))\nn = data[0]\na = data[1:1 + n]\nk = data[1 + n]\nseen = set(a)\nprint(sum(1 for value in a if value + k in seen))\n",
+    "mutationRationale": "The mutant uses set membership and counts each lower value occurrence only once, so it loses the multiplicity of matching upper values; it also incorrectly pairs every value with itself when k is zero."
   }
 }
