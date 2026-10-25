@@ -8,7 +8,18 @@
       "maxDuration": 60
     }
   },
-  "rewrites": [
-    { "source": "/control-room", "destination": "/platform.html" }
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/[...path].mjs"
+    },
+    {
+      "src": "/control-room",
+      "dest": "/platform.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
   ]
 }
