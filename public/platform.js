@@ -846,7 +846,12 @@ function renderReview(a) {
   const review = $('#review-area');
   if (!a) { review.innerHTML=''; return; }
 
-  /* Keep it open — only close explicitly */
+  /* Preserve open state of details and user inputs */
+  const openQuestions = new Set([...review.querySelectorAll('.answer-review-wrap[open]')].map(el=>el.dataset.reviewQ));
+  const activeInput = document.activeElement;
+  const activeInputQ = activeInput?.dataset?.score || activeInput?.dataset?.note;
+  const activeInputType = activeInput?.dataset?.score !== undefined ? 'score' : (activeInput?.dataset?.note !== undefined ? 'note' : null);
+
   const entries=Object.entries(a.answers||{}).sort((x,y)=>Number(x[0])-Number(y[0]));
   const submittedCount=entries.filter(([,x])=>x.submittedAt).length;
   const savedCount=entries.filter(([,x])=>x.savedAt).length;
@@ -891,7 +896,8 @@ function renderReview(a) {
               <small>${t.time?`${esc(t.time)}s`:'Result'}</small>
               <pre>${esc(t.compileOutput||t.stderr||t.actualOutput||'(No output)')}</pre>
             </div>`).join('')||'';
-          return`<details class="answer-review-wrap" data-review-q="${qid}">
+          const isOpen = openQuestions.has(String(qid)) ? 'open' : '';
+          return`<details class="answer-review-wrap" data-review-q="${qid}" ${isOpen}>
             <div class="answer-review">
               <summary>
                 <span class="ar-title">${esc(a.questionTitles?.[qid]||`Q${qid}`)}</span>
@@ -915,6 +921,12 @@ function renderReview(a) {
         }).join(''):'<div class="empty">No code submitted yet.</div>'}
       </div>
     </div>`;
+
+  /* Restore focus if admin was typing */
+  if (activeInputQ && activeInputType) {
+    const restored = review.querySelector(`[data-${activeInputType}="${activeInputQ}"]`);
+    if (restored) restored.focus();
+  }
 
   $('#close-review').onclick=()=>{adminAttempt=null; review.innerHTML='';};
 
