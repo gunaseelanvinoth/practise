@@ -1,0 +1,4 @@
+const fs=require('node:fs');const path=require('node:path');const questions=require('../questions.json');
+const seed=process.env.TEST_SEED||'DSA-PLAB-2026';let state=2166136261;for(const c of seed)state=Math.imul(state^c.charCodeAt(0),16777619);function random(){state+=0x6D2B79F5;let t=state;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return((t^(t>>>14))>>>0)/4294967296}
+const shuffled=[...questions];for(let i=shuffled.length-1;i>0;i--){const j=Math.floor(random()*(i+1));[shuffled[i],shuffled[j]]=[shuffled[j],shuffled[i]]}
+if(shuffled.length<2)throw new Error('At least two questions are required.');const split=Math.ceil(shuffled.length/2),sets={seed,setA:shuffled.slice(0,split).map(q=>q.id),setB:shuffled.slice(split).map(q=>q.id)};fs.writeFileSync(path.join(__dirname,'..','sets.json'),JSON.stringify(sets,null,2)+'\n');console.log(`Seed: ${seed}\nSet A: ${sets.setA.length} questions\nSet B: ${sets.setB.length} questions\nOverlap: 0\nSaved sets.json`);

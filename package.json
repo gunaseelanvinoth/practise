@@ -1,0 +1,12 @@
+{
+  "name": "dsa-assessment-platform",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Small-group DSA coding assessment platform with live admin monitoring",
+  "scripts": {
+    "start": "node local-server.cjs",
+    "test": "node --test",
+    "import:questions": "node scripts/import-questions.js",
+    "generate:sets": "node scripts/generate-sets.js"
+  }
+}

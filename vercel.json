@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "framework": null,
+  "buildCommand": null,
+  "outputDirectory": "public",
+  "functions": {
+    "api/[...path].mjs": {
+      "maxDuration": 60
+    }
+  },
+  "rewrites": [
+    { "source": "/control-room", "destination": "/platform.html" }
+  ]
+}

@@ -7,7 +7,7 @@ A small-group coding test app for two candidates, created from the supplied 100-
 1. Open PowerShell and change to this folder (quotes matter because `New project` contains a space):
 
    ```powershell
-   cd "C:\Users\ELCOT\OneDrive\Documents\ChatGPT\New project"
+   cd "C:\path\to\project"
    ```
 
 2. Start the app with the Windows npm launcher. This avoids PowerShell's `npm.ps1` script-policy error. Keep this terminal open; the browser will say **Server unavailable** whenever the server is stopped:
@@ -53,10 +53,9 @@ Redeploy after saving environment variables. Without both Upstash variables, sta
 
 ## Question source utilities
 
-- `npm.cmd run import:questions` re-parses the default source at `C:\Users\ELCOT\Downloads\DSA Practice Lab.html`; provide another HTML path as an argument if needed.
+- `npm.cmd run import:questions` re-parses the default source at `C:\path\to\DSA Practice Lab.html`; provide another HTML path as an argument if needed.
 - `npm.cmd run generate:sets` rebuilds reproducible, non-overlapping 50-question sets. The default seed is `DSA-PLAB-2026`; set `TEST_SEED` to change it.
 
 Import validation from the supplied HTML: **100 questions; 100 unique IDs; 0 missing titles, statements, Java references, or Python references; 4 without explicit sample input; 18 without explicit sample output.**
 
 Run the local grading and language-selection checks with `npm.cmd test`.
-
