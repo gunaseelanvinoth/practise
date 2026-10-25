@@ -152,7 +152,9 @@ $('#admin-logout').onclick = () => { tokenStore.removeItem('admin-token'); show(
 async function enterExam() {
   try {
     const data = await api('/api/me', { auth:'candidate-token' });
-    attempt = data.attempt; questions = data.questions; index = attempt.currentIndex||0;
+    attempt = data.attempt;
+    attempt.answers = data.answers || attempt.answers || {};
+    questions = data.questions; index = attempt.currentIndex||0;
     try { drafts = JSON.parse(sessionStorage.getItem(`dsa-drafts-${attempt.id}`)||'{}'); } catch { drafts={}; }
     if (attempt.submitted) { show('exam'); renderExam(); finishView('Your attempt has been submitted.'); }
     else { show('exam'); renderExam(); startPings(); loadLanguages(); }
@@ -313,6 +315,7 @@ function clock() {
 /* ─── Autosave ───────────────────────────────────────────── */
 async function saveCode() {
   if (!attempt||attempt.submitted) return;
+  if (!attempt.answers) attempt.answers = {};
   if (saveBusy) { await new Promise(r=>saveWaiters.push(r)); return saveCode(); }
   const q=currentQuestion(), lang=selectedLanguage(); if(!lang) return;
   const source = $('#code').value;
@@ -363,6 +366,7 @@ $('#next-question').onclick=()=>navigate(index+1);
 /* ─── Run / Submit ───────────────────────────────────────── */
 async function run(submit) {
   if (saveHandle) clearTimeout(saveHandle);
+  if (!attempt.answers) attempt.answers = {};
   const q=currentQuestion(), lang=selectedLanguage(), btn=submit?$('#submit-code'):$('#run-code');
   if (!lang) { showToast('Code runner unavailable. Try refreshing.','error'); return; }
   await saveCode(); btn.disabled=true;
