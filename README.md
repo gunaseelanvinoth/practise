@@ -149,14 +149,22 @@ npm.cmd test
 
 This runs the offline unit tests for grading, hidden-data projection, CSV shape, and question-suite quality.
 
+After question-suite authoring is complete, verify every reference and intentionally flawed program locally with Python 3:
+
+```bash
+python3 scripts/verify-question-specs.py
+```
+
+On Windows, run it with `py -3 scripts/verify-question-specs.py`. It executes reference and mutant programs against every sample and hidden case without contacting Judge0.
+
 Two opt-in integration commands submit test programs to Judge0 (internet access required):
 
 ```bash
-npm.cmd run test:live   # Java and Python against all authored tests; flawed-code, compile, runtime and timeout probes
+npm.cmd run test:live   # Python across authored suites; Java baseline and error probes
 npm.cmd run test:e2e    # isolated local server, real Judge0, private-history and admin CSV authorization checks
 ```
 
-Both commands explicitly opt in to external code execution. They use disposable test data; `test:e2e` cleans up its isolated temporary directory.
+Both `npm` commands explicitly opt in to external code execution. The live script may send many Judge0 requests as coverage grows; the local verifier above is the default full-suite check. `test:e2e` uses disposable test data and cleans up its isolated temporary directory.
 
 ---
 
