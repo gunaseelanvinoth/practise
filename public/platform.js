@@ -3,6 +3,17 @@
 ============================================================ */
 (() => {
 
+/* ─── Instant routing (runs before anything else) ─────── */
+const _isAdmin = location.pathname==='/control-room'||location.search.includes('admin');
+document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+if (_isAdmin) {
+  const el = document.getElementById('admin-login');
+  if (el) el.classList.remove('hidden');
+} else {
+  const el = document.getElementById('landing');
+  if (el) el.classList.remove('hidden');
+}
+
 /* ─── Utilities ──────────────────────────────────────────── */
 const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
@@ -916,7 +927,7 @@ function renderReview(a) {
 })();
 
 /* ─── Route on load ──────────────────────────────────────── */
-if (location.pathname==='/control-room'||location.search.includes('admin')) {
+if (_isAdmin) {
   if (sessionStorage.getItem('admin-token')){ show('dashboard');loadDashboard(); } else show('admin-login');
 } else {
   if (sessionStorage.getItem('candidate-token')) enterExam();
