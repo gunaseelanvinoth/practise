@@ -206,7 +206,10 @@
             <div class="eyebrow">CANDIDATE MONITORING</div>
             <h2>Live Candidates</h2>
           </div>
-          <span class="live-badge"><span class="pulse-dot"></span>LIVE</span>
+          <div style="display:flex;align-items:center;gap:10px">
+            <button id="clear-all-candidates-btn" class="btn btn-ghost" style="padding:6px 12px;font-size:11px;color:var(--red)" title="Delete all candidates">🗑 Clear All</button>
+            <span class="live-badge"><span class="pulse-dot"></span>LIVE</span>
+          </div>
         </div>
         <div id="candidate-table"></div>
       </section>

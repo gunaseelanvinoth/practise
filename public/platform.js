@@ -492,7 +492,7 @@ function renderDashboard(d) {
   else {
     const sc=s=>({Online:'chip-online',Idle:'chip-idle',Offline:'chip-offline',Submitted:'chip-submitted'})[s]||'chip-offline';
     $('#candidate-table').innerHTML=`<div class="candidate-table-wrap"><table class="cand-table">
-      <thead><tr><th>Candidate</th><th>Set</th><th>Status</th><th>Position</th><th>Submitted</th><th>Marks</th><th>Cases</th><th>Elapsed</th><th></th></tr></thead>
+      <thead><tr><th>Candidate</th><th>Set</th><th>Status</th><th>Position</th><th>Submitted</th><th>Marks</th><th>Cases</th><th>Elapsed</th><th>Actions</th></tr></thead>
       <tbody>${a.map(x=>{
         const ans=Object.values(x.answers||{});
         const xs=ans.map(y=>y.testEvaluation).filter(y=>y?.total);
@@ -507,7 +507,10 @@ function renderDashboard(d) {
           <td>${Number(x.score).toFixed(2)}/${x.total}</td>
           <td>${t?`${p}/${t}·${Math.round(p/t*100)}%${errs?` · ${errs}err`:''}`:'—'}</td>
           <td>${Math.max(0,Math.floor((Date.now()-x.startedAt)/60000))}m</td>
-          <td><button class="btn btn-ghost review-btn" data-id="${x.id}" style="padding:6px 12px;font-size:11px">Review</button></td>
+          <td style="white-space:nowrap">
+            <button class="btn btn-ghost review-btn" data-id="${x.id}" style="padding:6px 12px;font-size:11px">Review</button>
+            <button class="btn btn-danger delete-attempt-btn" data-id="${x.id}" data-name="${esc(x.name)}" style="padding:6px 10px;font-size:11px;margin-left:4px" title="Delete Candidate">🗑 Delete</button>
+          </td>
         </tr>`;
       }).join('')}</tbody></table></div>`;
   }
@@ -515,6 +518,39 @@ function renderDashboard(d) {
   $$('.review-btn').forEach(b=>b.onclick=()=>{
     adminAttempt=d.attempts.find(x=>x.id===b.dataset.id); renderReview(adminAttempt);
   });
+  $$('.delete-attempt-btn').forEach(b=>b.onclick=async()=>{
+    const id=b.dataset.id, name=b.dataset.name;
+    if(!confirm(`Delete candidate "${name}" and all their submitted code and marks?`)) return;
+    try {
+      b.disabled=true; b.textContent='...';
+      await api('/api/admin/delete-attempt',{method:'POST',auth:'admin-token',body:{attemptId:id}});
+      showToast(`Candidate "${name}" deleted.`, 'success');
+      if(adminAttempt?.id===id) { adminAttempt=null; $('#review-area').innerHTML=''; }
+      await loadDashboard();
+    } catch(e) {
+      showToast(e.message||'Delete failed', 'error');
+      b.disabled=false; b.textContent='🗑 Delete';
+    }
+  });
+
+  const clearAllBtn = $('#clear-all-candidates-btn');
+  if (clearAllBtn) {
+    clearAllBtn.onclick = async () => {
+      if (!confirm('Are you sure you want to delete ALL candidates and their test data? This cannot be undone.')) return;
+      try {
+        clearAllBtn.disabled = true; clearAllBtn.textContent = 'Clearing…';
+        await api('/api/admin/clear-all', { method:'POST', auth:'admin-token' });
+        showToast('All candidate entries cleared.', 'success');
+        adminAttempt = null;
+        $('#review-area').innerHTML = '';
+        await loadDashboard();
+      } catch(e) {
+        showToast(e.message||'Clear all failed', 'error');
+      } finally {
+        clearAllBtn.disabled = false; clearAllBtn.textContent = '🗑 Clear All';
+      }
+    };
+  }
   if (adminAttempt) { const fresh=d.attempts.find(x=>x.id===adminAttempt.id); if(fresh){adminAttempt=fresh;renderReview(fresh);} }
 }
 
