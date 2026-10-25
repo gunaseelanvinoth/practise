@@ -9,10 +9,13 @@ A real-time online coding-test platform for administrators and candidates. Candi
 | Feature | Description |
 |---------|-------------|
 | 🎨 Animated UI | Dark cosmic theme with particle canvas, glassmorphism cards, animated aurora gradient |
-| 👤 Candidate portal | Login page, timer, question navigation, syntax-highlighted code editor |
+| 👤 Candidate portal | Login page, timer, question navigation, Monaco editor with a textarea fallback, reset/clear controls |
 | 🔐 Admin dashboard | Password-protected control room with live candidate monitoring |
-| ⚡ Code execution | Server-side via Judge0 CE (safe, sandboxed, never runs on your server) |
+| ⚡ Code execution | Server-side via Judge0 CE; sample runs use visible tests and official submissions use private tests |
 | 📊 Analytics | Question-level stats, per-candidate test case pass/fail, score breakdown |
+| 🧾 Official submissions | Saved source, language, timestamp, status and per-test results; candidates see only their own history |
+| 📤 CSV exports | Admin-selected submissions, user-filtered exports, or all results; eight documented columns, no email/IP fields |
+| 🧪 Separate test suites | Admins can maintain public samples and hidden grading cases independently for every question |
 | 💾 Persistent storage | Upstash Redis for production; local file-based for development |
 | 🔄 Autosave | Code saved every 650 ms of idle time, preserved across refreshes |
 | 🌐 Dual deployment | Works locally and on Vercel |
@@ -93,7 +96,12 @@ After adding env vars, go to **Deployments** → **Redeploy** (check "Redeploy w
 5. **Analyse**: Click any question card to see per-candidate test case results
 6. **Review code**: Click "Review" on any candidate to read their submitted code
 7. **Award marks**: Use the manual grader (0.00–1.00) for ungraded questions
-8. **Close test**: Toggle access off when done
+8. **Export submissions**: Filter by user, question, language or status; select records, export one user's code, or export all code results
+9. **Close test**: Toggle access off when done
+
+In **Test Cases**, choose a question and select either **Visible sample tests** or **Hidden tests**. Only visible samples are returned to candidate browsers. Hidden-case inputs and expected outputs remain server-side and are exposed only in the authenticated admin dashboard.
+
+Each official submission is tied to its attempt ID (the internal user ID) so the candidate history endpoint cannot list another candidate's submissions. Sample runs are not official submissions and do not affect official grade totals. CSV files contain exactly these fields: `Question ID`, `Question`, `Language`, `Source Code`, `Test Cases Passed`, `Test Cases Failed`, `Total Test Cases`, `Final Status`.
 
 ---
 
@@ -109,9 +117,11 @@ After adding env vars, go to **Deployments** → **Redeploy** (check "Redeploy w
 │   ├── handler.cjs       Vercel API handler (Upstash Redis)
 │   └── [...path].mjs     Vercel serverless entry point
 ├── lib/
-│   └── evaluation.js     Grading utilities
+│   ├── evaluation.js     Output normalization and grading utilities
+│   └── platform.js       Test-suite normalization, submission model, CSV export
 ├── local-server.cjs      Local Node.js server
 ├── questions.json        100 DSA questions
+├── question-specs.json   Input/output formats and runnable suites for curated questions
 ├── sets.json             Set A and Set B question ID lists
 ├── vercel.json           Vercel configuration
 ├── .env.example          Environment variable template
@@ -137,13 +147,30 @@ After adding env vars, go to **Deployments** → **Redeploy** (check "Redeploy w
 npm.cmd test
 ```
 
-This runs the 4 built-in grading unit tests in `test/evaluation.test.js`.
+This runs the offline unit tests for grading, hidden-data projection, CSV shape, and question-suite quality.
+
+Verify every saved reference and intentionally flawed program locally with Python 3. Use `--allow-partial` for an incremental checkpoint; omit it when all 100 question suites are present:
+
+```bash
+python3 scripts/verify-question-specs.py --allow-partial
+```
+
+On Windows, run it with `py -3 scripts/verify-question-specs.py --allow-partial`. It executes reference and mutant programs against every saved sample and hidden case without contacting Judge0. See `REMAINING-QUESTIONS.md` for the current coverage snapshot.
+
+Two opt-in integration commands submit test programs to Judge0 (internet access required):
+
+```bash
+npm.cmd run test:live   # Python across authored suites; Java baseline and error probes
+npm.cmd run test:e2e    # isolated local server, real Judge0, private-history and admin CSV authorization checks
+```
+
+Both `npm` commands explicitly opt in to external code execution. The live script may send many Judge0 requests as coverage grows; the local verifier above is the default full-suite check. `test:e2e` uses disposable test data and cleans up its isolated temporary directory.
 
 ---
 
 ## ⚠️ Notes
 
-- **No private test cases by default** — automatic scoring requires you to configure test cases per question in the admin dashboard. Without them, submissions are saved as "ungraded" for manual review.
+- **Question data coverage** — 25 of 100 questions (IDs 1–25) have authored input/output formats, visible samples and question-specific hidden tests. The other 75 questions remain to be authored from their actual problem statements; see `REMAINING-QUESTIONS.md`.
 - **Judge0 public instance** may have rate limits. For heavy use, provision your own Judge0 instance.
 - **Local data** is stored in `data/state.json` (created automatically, git-ignored).
 - **Production data** requires Upstash Redis. The platform shows a clear error if the database is not configured.

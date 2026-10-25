@@ -261,15 +261,44 @@
           <h2>Private Test Cases</h2>
         </div>
       </div>
-      <p class="muted-text">Configure up to 20 input/output pairs per question. Cases are hidden from candidates and used for automatic scoring on submission.</p>
+      <p class="muted-text">Manage separate visible sample tests and private hidden tests for each question. Only hidden tests are used for official submissions.</p>
+      <div id="test-suite-coverage" class="live-badge">Checking coverage…</div>
       <label class="form-label" for="case-question">Select Question</label>
       <select id="case-question" class="settings-select case-select"></select>
+      <label class="form-label" for="case-suite-type">Test suite</label>
+      <select id="case-suite-type" class="settings-select case-select">
+        <option value="sampleTests">Visible sample tests</option>
+        <option value="hiddenTests">Hidden tests</option>
+      </select>
       <div id="case-rows" class="case-rows-container"></div>
       <div class="case-actions">
         <button id="add-case" class="btn btn-ghost">+ Add Test Case</button>
         <button id="save-cases" class="btn btn-primary">Save Cases</button>
         <span id="case-save-state" class="saved-indicator"></span>
       </div>
+    </section>
+
+    <section class="glass-card panel-section submissions-panel">
+      <div class="section-header">
+        <div><div class="eyebrow">OFFICIAL JUDGMENTS</div><h2>Code Submissions</h2></div>
+        <span id="submission-selection-count" class="live-badge">0 SELECTED</span>
+      </div>
+      <div class="submission-filters">
+        <label>Search<input id="submission-search" class="form-input" type="search" placeholder="Question or user"></label>
+        <label>User<select id="submission-filter-user" class="settings-select"><option value="">All users</option></select></label>
+        <label>Question<select id="submission-filter-question" class="settings-select"><option value="">All questions</option></select></label>
+        <label>Language<select id="submission-filter-language" class="settings-select"><option value="">All languages</option></select></label>
+        <label>Status<select id="submission-filter-status" class="settings-select"><option value="">All statuses</option></select></label>
+      </div>
+      <div class="submission-toolbar">
+        <button id="submission-select-all" class="btn btn-ghost">Select All</button>
+        <button id="submission-clear-selection" class="btn btn-ghost">Clear Selection</button>
+        <button id="submission-export-selected" class="btn btn-primary">Export Selected as CSV</button>
+        <label>User export<select id="submission-export-user" class="settings-select"><option value="">Select user…</option></select></label>
+        <button id="submission-export-user-button" class="btn btn-secondary">Export User Code CSV</button>
+        <button id="submission-export-all" class="btn btn-ghost">Export All Code Results</button>
+      </div>
+      <div id="submissions-table" class="candidate-table-wrap"></div>
     </section>
 
     <!-- Candidate code review area -->
@@ -321,15 +350,17 @@
 
         <h2 id="question-title" class="question-title">Loading question…</h2>
         <div id="question-statement" class="question-statement"></div>
+        <div id="question-format" class="question-format"></div>
 
         <!-- Public sample -->
         <div class="sample-block">
           <div class="sample-header">
-            <span>📋 PUBLIC SAMPLE</span>
-            <span class="sample-note">Example only — not a grading case</span>
+            <span>PUBLIC SAMPLE TESTS</span>
+            <span class="sample-note">Visible test cases</span>
           </div>
-          <pre id="question-sample" class="sample-pre">No sample data supplied.</pre>
-          <p class="sample-hint">Run Sample checks this visible example. Submit Answer runs the admin-configured private test suite.</p>
+          <div id="question-samples" class="question-samples"></div>
+          <pre id="question-sample" class="sample-pre hidden">No sample data supplied.</pre>
+          <p class="sample-hint">Run Sample executes only these visible tests. Submit executes this question’s private hidden suite.</p>
         </div>
 
         <!-- Code editor -->
@@ -343,6 +374,7 @@
           </div>
 
           <div class="editor-stage">
+            <div id="monaco-editor" class="monaco-editor hidden" aria-label="Code editor"></div>
             <pre id="highlight" aria-hidden="true"><code id="highlight-code"></code></pre>
             <textarea id="code" spellcheck="false" autocapitalize="off" autocomplete="off"
               autocorrect="off" placeholder="Write your solution here…"
@@ -354,9 +386,15 @@
             <span id="run-state" class="run-state"></span>
           </div>
 
+          <div class="editor-actions">
+            <button id="reset-code" class="btn btn-ghost" type="button">Reset Starter Code</button>
+            <button id="clear-code" class="btn btn-ghost" type="button">Clear Code</button>
+          </div>
+
           <div id="output-box" class="output-box hidden">
             <div class="output-header" id="output-title">RUN RESULT</div>
             <pre id="output-text" class="output-pre"></pre>
+            <div id="output-case-results" class="question-samples"></div>
           </div>
         </div>
 
@@ -370,6 +408,11 @@
           <button id="finish-exam" class="btn btn-danger">🏁 Finish Test</button>
         </div>
 
+        <section class="submission-history-block">
+          <div class="sample-header"><span>MY SUBMISSION HISTORY</span><button id="refresh-submission-history" class="btn btn-ghost" type="button">Refresh</button></div>
+          <div id="submission-history" class="submission-history"><p class="muted-text">Your official submissions will appear here.</p></div>
+        </section>
+
       </article>
     </div>
   </section>
@@ -382,6 +425,7 @@
   <span>DSA Practice Lab</span>
 </footer>
 
-<script src="platform.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs/loader.min.js" defer></script>
+<script src="platform.js" defer></script>
 </body>
 </html>

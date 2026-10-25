@@ -1,0 +1,82 @@
+const test = require('node:test');
+const assert = require('node:assert/strict');
+const specs = require('../question-specs.json');
+const questions = require('../questions.json');
+const pythonOracles = require('./question-oracles.json');
+const { normalizeOutput } = require('../lib/evaluation');
+const jsOracleIds = new Set(['1','2','3','4','5','6','13','14','15','17','18','22','25']);
+
+function values(input) { return input.trim().split(/\s+/).map(Number); }
+function oracle(id, input) {
+  const data = values(input);
+  if (id === '1' || id === '2') {
+    const n = data[0], array = data.slice(1, n + 1);
+    if (id === '1') return array.map((value, i) => `${i} -> ${value}`).join('\n');
+    return `First = ${array[0]}\nLast  = ${array[n - 1]}`;
+  }
+  if (id === '4') { const n = data[0], array = data.slice(1, n + 1); return (array.reduce((sum, x) => sum + x, 0) / n).toFixed(6); }
+  if ([3, 5, 6, 13, 17, 18, 25].includes(Number(id))) {
+    const n = data[0], array = data.slice(1, n + 1);
+    if (id === '3') return String(array.reduce((sum, value) => sum + value, 0));
+    if (id === '5') return String(Math.max(...array));
+    if (id === '6') return String(Math.min(...array));
+    if (id === '13') return array.reverse().join(' ');
+    if (id === '17') return `Positive = ${array.filter(x => x > 0).length}, Negative = ${array.filter(x => x < 0).length}, Zero = ${array.filter(x => x === 0).length}`;
+    if (id === '18') return array.map(x => x * 2).join(' ');
+    if (id === '25') return String(array.every((value, i) => i === 0 || array[i - 1] <= value));
+  }
+  if (id === '14' || id === '15') {
+    const n = data[0], array = data.slice(1, n + 1), key = data[n + 1], index = array.indexOf(key);
+    return id === '14' ? String(index) : String(index >= 0);
+  }
+  if (id === '22') {
+    const n = data[0], target = data[1], array = data.slice(2, n + 2);
+    return String(array.some((value, i) => array.some((other, j) => i !== j && value + other === target)));
+  }
+  throw new Error(`No oracle for question ${id}`);
+}
+function deliberatelyWrong(id, input) {
+  const data = values(input);
+  if (id === '1') return data.slice(1, data[0] + 1).map((value, i) => `${i + 1} -> ${value}`).join('\n');
+  if (id === '2') { const a = data.slice(1, data[0] + 1); return `First = ${a[0]}\nLast  = ${a[data[0] - 2]}`; }
+  if (id === '4') { const n = data[0], a = data.slice(1, n + 1); return Math.floor(a.reduce((sum, x) => sum + x, 0) / n).toFixed(6); }
+  if (id === '3') return String(data[1]);
+  if (id === '5') return String(Math.min(...data.slice(1, data[0] + 1)));
+  if (id === '6') return String(Math.max(...data.slice(1, data[0] + 1)));
+  if (id === '13') return data.slice(1, data[0] + 1).join(' ');
+  if (id === '14') return '-1';
+  if (id === '15') return 'false';
+  if (id === '17') return 'Positive = 0, Negative = 0, Zero = 0';
+  if (id === '18') return data.slice(1, data[0] + 1).join(' ');
+  if (id === '22') return 'false';
+  if (id === '25') return 'true';
+  return '';
+}
+
+test('saved suites map to real questions and contain enough visible and hidden cases', () => {
+  const bankIds = new Set(questions.map(question => String(question.id)));
+  const savedIds = Object.keys(specs);
+  assert.ok(savedIds.every(id => bankIds.has(id)), 'no suite may invent a question ID');
+  assert.deepEqual(savedIds, savedIds.slice().sort((a,b)=>Number(a)-Number(b)));
+  for (const [id, suite] of Object.entries(specs)) {
+    assert.ok(suite.sampleTests.length >= 2, `Q${id} sample count`);
+    assert.ok(suite.hiddenTests.length >= 3, `Q${id} hidden count`);
+    assert.ok(suite.inputFormat && suite.outputFormat && suite.constraints, `Q${id} format`);
+  }
+});
+
+test('legacy outputs match reference logic; generated suites retain executable Python reference and mutant', () => {
+  for (const [id, suite] of Object.entries(specs)) {
+    const all = [...suite.sampleTests, ...suite.hiddenTests];
+    if (jsOracleIds.has(id)) {
+      for (const [index, item] of all.entries()) {
+        assert.equal(normalizeOutput(oracle(id, item.input)), normalizeOutput(item.expectedOutput), `Q${id} case ${index + 1}`);
+      }
+      assert.ok(all.some(item => normalizeOutput(deliberatelyWrong(id, item.input)) !== normalizeOutput(item.expectedOutput), `Q${id} must catch its incorrect algorithm`));
+    } else {
+      assert.ok(pythonOracles[id]?.referencePython, `Q${id} reference source missing`);
+      assert.ok(pythonOracles[id]?.incorrectPython, `Q${id} mutant source missing`);
+      assert.ok(pythonOracles[id]?.mutationRationale, `Q${id} mutation rationale missing`);
+    }
+  }
+});

@@ -1,6 +1,18 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { MAX_CASES, latestLanguages, validateCases, evaluateSuite, candidateSummary } = require('../lib/evaluation');
+const { MAX_CASES, latestLanguages, normalizeOutput, validateCases, evaluateSuite, candidateSummary } = require('../lib/evaluation');
+
+test('normalizes insignificant whitespace without changing output tokens', () => {
+  assert.equal(normalizeOutput(' 1   2\r\n3  '), normalizeOutput('1 2 3\n'));
+  assert.notEqual(normalizeOutput('1 2 3'), normalizeOutput('1 2 4'));
+});
+
+test('an empty suite cannot be reported as a successful evaluation', async () => {
+  const result = await evaluateSuite(async () => ({ status: 'Accepted', stdout: '' }), 1, 'solution', []);
+  assert.equal(result.complete, false);
+  assert.equal(result.score, null);
+  assert.equal(result.total, 0);
+});
 
 test('keeps only the newest available Judge0 entry for each language', () => {
   const selected = latestLanguages([

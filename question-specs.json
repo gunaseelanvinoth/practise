@@ -1,0 +1,807 @@
+{
+  "1": {
+    "inputFormat": "One case. The first token is integer n, the number of array elements. The next n whitespace-separated tokens are signed integers a[0] through a[n-1]. Tokens may be separated by spaces or newlines; there is no additional input.",
+    "outputFormat": "For each element, in original array order, print one line exactly as `index -> value`, using zero-based indices from 0 through n-1. Print no other text.",
+    "constraints": "1 <= n <= 100000; -1000000000 <= a[i] <= 1000000000 for every i. The array is nonempty. Each input contains exactly one case. Output order is the original left-to-right array order, and indices are zero-based as in the question's example and pseudocode.",
+    "sampleTests": [
+      {
+        "input": "7\n14 3 21 8 17 6 11\n",
+        "expectedOutput": "0 -> 14\n1 -> 3\n2 -> 21\n3 -> 8\n4 -> 17\n5 -> 6\n6 -> 11\n"
+      },
+      {
+        "input": "1\n-42\n",
+        "expectedOutput": "0 -> -42\n"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "5\n-9 -1 -9 0 12\n",
+        "expectedOutput": "0 -> -9\n1 -> -1\n2 -> -9\n3 -> 0\n4 -> 12\n"
+      },
+      {
+        "input": "6\n7 7 7 7 7 7\n",
+        "expectedOutput": "0 -> 7\n1 -> 7\n2 -> 7\n3 -> 7\n4 -> 7\n5 -> 7\n"
+      },
+      {
+        "input": "4\n1000000000 -1000000000 23 -5\n",
+        "expectedOutput": "0 -> 1000000000\n1 -> -1000000000\n2 -> 23\n3 -> -5\n"
+      },
+      {
+        "input": "8\n0 -1 1 0 -1 1 0 -1\n",
+        "expectedOutput": "0 -> 0\n1 -> -1\n2 -> 1\n3 -> 0\n4 -> -1\n5 -> 1\n6 -> 0\n7 -> -1\n"
+      }
+    ]
+  },
+  "2": {
+    "inputFormat": "One case: the first line contains integer n, the number of array elements. The next line(s) contain exactly n space-separated integers a[0] through a[n-1].",
+    "outputFormat": "Print exactly two lines: `First = x` where x is a[0], then `Last  = y` where the second label has two spaces between `Last` and `=` as shown in the bank example. Print no other text.",
+    "constraints": "1 <= n <= 100000; -1000000000 <= a[i] <= 1000000000 for every i. The array is nonempty. Whitespace and line breaks may separate the n integer values arbitrarily.",
+    "sampleTests": [
+      {
+        "input": "7\n14 3 21 8 17 6 11\n",
+        "expectedOutput": "First = 14\nLast  = 11\n"
+      },
+      {
+        "input": "1\n-42\n",
+        "expectedOutput": "First = -42\nLast  = -42\n"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "2\n5 -9\n",
+        "expectedOutput": "First = 5\nLast  = -9\n"
+      },
+      {
+        "input": "6\n0 7 0 7 0 7\n",
+        "expectedOutput": "First = 0\nLast  = 7\n"
+      },
+      {
+        "input": "5\n-1000000000 18 18 -3 1000000000\n",
+        "expectedOutput": "First = -1000000000\nLast  = 1000000000\n"
+      },
+      {
+        "input": "4\n23 -100 8 -100\n",
+        "expectedOutput": "First = 23\nLast  = -100\n"
+      }
+    ]
+  },
+  "3": {
+    "inputFormat": "The first line contains n. The second line contains n space-separated integers.",
+    "outputFormat": "Print the sum of the n integers.",
+    "constraints": "1 ≤ n ≤ 100000; -10^9 ≤ each value ≤ 10^9.",
+    "sampleTests": [
+      {
+        "input": "5\n1 2 3 4 5\n",
+        "expectedOutput": "15\n"
+      },
+      {
+        "input": "4\n-1 3 0 5\n",
+        "expectedOutput": "7\n"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "1\n99\n",
+        "expectedOutput": "99\n"
+      },
+      {
+        "input": "5\n0 0 0 0 0\n",
+        "expectedOutput": "0\n"
+      },
+      {
+        "input": "6\n-10 -5 0 7 8 20\n",
+        "expectedOutput": "20\n"
+      }
+    ]
+  },
+  "4": {
+    "inputFormat": "The first line contains an integer n, the number of elements. The second line contains n space-separated integers a1, a2, ..., an.",
+    "outputFormat": "Print the arithmetic mean of the n values on one line, rounded to 6 digits after the decimal point. For an exact halfway case, round away from zero.",
+    "constraints": "1 ≤ n ≤ 100000; −1000000000 ≤ ai ≤ 1000000000 for every i. The array is non-empty.",
+    "sampleTests": [
+      {
+        "input": "7\n14 3 21 8 17 6 11\n",
+        "expectedOutput": "11.428571\n"
+      },
+      {
+        "input": "3\n-4 7 0\n",
+        "expectedOutput": "1.000000\n"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "1\n9\n",
+        "expectedOutput": "9.000000\n"
+      },
+      {
+        "input": "4\n1 2 2 2\n",
+        "expectedOutput": "1.750000\n"
+      },
+      {
+        "input": "5\n-10 -3 -2 0 5\n",
+        "expectedOutput": "-2.000000\n"
+      },
+      {
+        "input": "6\n1000000000 1000000000 -1000000000 -1000000000 1 0\n",
+        "expectedOutput": "0.166667\n"
+      },
+      {
+        "input": "3\n-1 -2 -2\n",
+        "expectedOutput": "-1.666667\n"
+      }
+    ]
+  },
+  "5": {
+    "inputFormat": "The first line contains n. The second line contains n space-separated integers.",
+    "outputFormat": "Print the largest array value.",
+    "constraints": "1 ≤ n ≤ 100000; -10^9 ≤ each value ≤ 10^9.",
+    "sampleTests": [
+      {
+        "input": "5\n1 9 -2 4 3\n",
+        "expectedOutput": "9\n"
+      },
+      {
+        "input": "4\n-8 -3 -12 -5\n",
+        "expectedOutput": "-3\n"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "1\n99\n",
+        "expectedOutput": "99\n"
+      },
+      {
+        "input": "5\n7 7 7 7 7\n",
+        "expectedOutput": "7\n"
+      },
+      {
+        "input": "6\n-10 0 20 5 20 -1\n",
+        "expectedOutput": "20\n"
+      }
+    ]
+  },
+  "6": {
+    "inputFormat": "The first line contains n. The second line contains n space-separated integers.",
+    "outputFormat": "Print the smallest array value.",
+    "constraints": "1 ≤ n ≤ 100000; -10^9 ≤ each value ≤ 10^9.",
+    "sampleTests": [
+      {
+        "input": "5\n1 9 -2 4 3\n",
+        "expectedOutput": "-2\n"
+      },
+      {
+        "input": "4\n8 3 12 5\n",
+        "expectedOutput": "3\n"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "1\n99\n",
+        "expectedOutput": "99\n"
+      },
+      {
+        "input": "5\n7 7 7 7 7\n",
+        "expectedOutput": "7\n"
+      },
+      {
+        "input": "6\n-10 0 20 5 -20 -1\n",
+        "expectedOutput": "-20\n"
+      }
+    ]
+  },
+  "7": {
+    "inputFormat": "The first line contains an integer n, the number of array elements. The second line contains n space-separated integers.",
+    "outputFormat": "Print exactly `Max = X, Min = Y` on one line, where X is the largest and Y the smallest array value.",
+    "constraints": "1 <= n <= 200000; -1000000000 <= each array value <= 1000000000. The array is non-empty. If values repeat, print their value normally; no index or tie-breaking rule is needed.",
+    "sampleTests": [
+      {
+        "input": "7\n14 3 21 8 17 6 11\n",
+        "expectedOutput": "Max = 21, Min = 3\n"
+      },
+      {
+        "input": "1\n-42\n",
+        "expectedOutput": "Max = -42, Min = -42\n"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "3\n-9 -2 -15\n",
+        "expectedOutput": "Max = -2, Min = -15\n"
+      },
+      {
+        "input": "4\n8 3 11 5\n",
+        "expectedOutput": "Max = 11, Min = 3\n"
+      },
+      {
+        "input": "4\n4 4 4 4\n",
+        "expectedOutput": "Max = 4, Min = 4\n"
+      },
+      {
+        "input": "4\n-1000000000 1000000000 0 -1000000000\n",
+        "expectedOutput": "Max = 1000000000, Min = -1000000000\n"
+      }
+    ]
+  },
+  "8": {
+    "inputFormat": "The first line contains an integer n, the number of array elements. The second line contains n space-separated integers a1, a2, ..., an.",
+    "outputFormat": "Print the second-largest distinct value in the array as one integer. If the maximum occurs multiple times, count it only once; output the next strictly smaller value.",
+    "constraints": "2 <= n <= 200000; -1000000000 <= ai <= 1000000000; the array is guaranteed to contain at least two distinct values.",
+    "sampleTests": [
+      {
+        "input": "7\n14 3 21 8 17 6 11\n",
+        "expectedOutput": "17\n"
+      },
+      {
+        "input": "5\n5 5 3 5 4\n",
+        "expectedOutput": "4\n"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "2\n-8 -3\n",
+        "expectedOutput": "-8\n"
+      },
+      {
+        "input": "6\n9 9 9 2 2 7\n",
+        "expectedOutput": "7\n"
+      },
+      {
+        "input": "7\n-1 -10 -3 -1 -7 -3 -2\n",
+        "expectedOutput": "-2\n"
+      },
+      {
+        "input": "8\n1 100 2 99 100 98 99 3\n",
+        "expectedOutput": "99\n"
+      },
+      {
+        "input": "5\n1000000000 -1000000000 0 1000000000 999999999\n",
+        "expectedOutput": "999999999\n"
+      }
+    ]
+  },
+  "9": {
+    "inputFormat": "The first line contains an integer n, the number of array elements. The second line contains n space-separated integers a1, a2, ..., an.",
+    "outputFormat": "Print one integer: the number of array elements strictly greater than 10.",
+    "constraints": "1 <= n <= 100000; -1000000000 <= ai <= 1000000000 for every i.",
+    "sampleTests": [
+      {
+        "input": "7\n14 3 21 8 17 6 11\n",
+        "expectedOutput": "4\n"
+      },
+      {
+        "input": "1\n10\n",
+        "expectedOutput": "0\n"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "6\n11 12 13 14 15 16\n",
+        "expectedOutput": "6\n"
+      },
+      {
+        "input": "5\n-100 -1 0 9 10\n",
+        "expectedOutput": "0\n"
+      },
+      {
+        "input": "8\n10 11 10 9 12 -5 10 11\n",
+        "expectedOutput": "3\n"
+      },
+      {
+        "input": "9\n1000000000 10 -1000000000 11 10 10 999999999 9 11\n",
+        "expectedOutput": "4\n"
+      }
+    ]
+  },
+  "10": {
+    "inputFormat": "The first line contains an integer n. The second line contains n space-separated integers a1, a2, ..., an.",
+    "outputFormat": "Print exactly: Even = E, Odd = O, where E is the number of even values and O is the number of odd values.",
+    "constraints": "1 <= n <= 1000; -1000000000 <= ai <= 1000000000 for every i.",
+    "sampleTests": [
+      {
+        "input": "7\n14 3 21 8 17 6 11\n",
+        "expectedOutput": "Even = 3, Odd = 4\n"
+      },
+      {
+        "input": "6\n-3 -2 -1 0 1 2\n",
+        "expectedOutput": "Even = 3, Odd = 3\n"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "1\n0\n",
+        "expectedOutput": "Even = 1, Odd = 0\n"
+      },
+      {
+        "input": "4\n-7 -5 -3 -1\n",
+        "expectedOutput": "Even = 0, Odd = 4\n"
+      },
+      {
+        "input": "5\n-8 -4 2 6 10\n",
+        "expectedOutput": "Even = 5, Odd = 0\n"
+      },
+      {
+        "input": "8\n-10 -9 -2 -1 0 1 2 9\n",
+        "expectedOutput": "Even = 4, Odd = 4\n"
+      }
+    ]
+  },
+  "11": {
+    "inputFormat": "The first line contains an integer n, the array length. The second line contains n space-separated integers. The third line contains the integer key to count. Input contains exactly one test case.",
+    "outputFormat": "Print one integer: the number of array elements equal to key.",
+    "constraints": "1 <= n <= 100000; -1000000000 <= each array value and key <= 1000000000. All inputs are valid.",
+    "sampleTests": [
+      {
+        "input": "9\n14 3 21 8 17 6 11 17 17\n17\n",
+        "expectedOutput": "3\n"
+      },
+      {
+        "input": "5\n4 8 0 9 3\n-2\n",
+        "expectedOutput": "0\n"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "1\n-7\n-7\n",
+        "expectedOutput": "1\n"
+      },
+      {
+        "input": "6\n5 5 5 5 5 5\n5\n",
+        "expectedOutput": "6\n"
+      },
+      {
+        "input": "8\n-3 2 -3 0 4 -3 9 -3\n-3\n",
+        "expectedOutput": "4\n"
+      },
+      {
+        "input": "4\n1 2 3 4\n4\n",
+        "expectedOutput": "1\n"
+      }
+    ]
+  },
+  "12": {
+    "inputFormat": "The first line contains an integer n, the number of elements. The second line contains n space-separated integers. Array indices are 0-based; sum the elements at indices 0, 2, 4, ... .",
+    "outputFormat": "Print one integer: the sum of the elements whose 0-based indices are even.",
+    "constraints": "1 <= n <= 200000; -1000000000 <= each array element <= 1000000000. The input contains exactly n array elements, and the answer fits in a signed 64-bit integer.",
+    "sampleTests": [
+      {
+        "input": "7\n14 3 21 8 17 6 11\n",
+        "expectedOutput": "63\n"
+      },
+      {
+        "input": "5\n5 2 9 4 7\n",
+        "expectedOutput": "21\n"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "1\n-8\n",
+        "expectedOutput": "-8\n"
+      },
+      {
+        "input": "6\n1 3 5 7 9 11\n",
+        "expectedOutput": "15\n"
+      },
+      {
+        "input": "8\n2 4 6 8 10 12 14 16\n",
+        "expectedOutput": "32\n"
+      },
+      {
+        "input": "5\n-3 8 -5 2 -7\n",
+        "expectedOutput": "-15\n"
+      }
+    ]
+  },
+  "13": {
+    "inputFormat": "The first line contains n. The second line contains n space-separated integers.",
+    "outputFormat": "Print the array in reverse order, separated by single spaces.",
+    "constraints": "1 ≤ n ≤ 100000; -10^9 ≤ each value ≤ 10^9.",
+    "sampleTests": [
+      {
+        "input": "5\n1 2 3 4 5\n",
+        "expectedOutput": "5 4 3 2 1\n"
+      },
+      {
+        "input": "4\n10 20 30 40\n",
+        "expectedOutput": "40 30 20 10\n"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "1\n99\n",
+        "expectedOutput": "99\n"
+      },
+      {
+        "input": "3\n-1 0 1\n",
+        "expectedOutput": "1 0 -1\n"
+      },
+      {
+        "input": "6\n5 4 3 2 1 0\n",
+        "expectedOutput": "0 1 2 3 4 5\n"
+      }
+    ]
+  },
+  "14": {
+    "inputFormat": "The first line contains n. The second line contains n space-separated integers. The third line contains the key to search for.",
+    "outputFormat": "Print the zero-based index of the first occurrence of the key, or -1 if absent.",
+    "constraints": "1 ≤ n ≤ 100000; -10^9 ≤ each array value and key ≤ 10^9.",
+    "sampleTests": [
+      {
+        "input": "5\n4 8 2 9 1\n1\n",
+        "expectedOutput": "4\n"
+      },
+      {
+        "input": "4\n10 20 30 40\n25\n",
+        "expectedOutput": "-1\n"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "1\n7\n7\n",
+        "expectedOutput": "0\n"
+      },
+      {
+        "input": "6\n5 8 5 3 5 9\n5\n",
+        "expectedOutput": "0\n"
+      },
+      {
+        "input": "5\n1 2 3 4 5\n5\n",
+        "expectedOutput": "4\n"
+      }
+    ]
+  },
+  "15": {
+    "inputFormat": "The first line contains n. The second line contains n space-separated integers. The third line contains the key to check.",
+    "outputFormat": "Print true if the key occurs in the array; otherwise print false. Use lowercase.",
+    "constraints": "1 ≤ n ≤ 100000; -10^9 ≤ each array value and key ≤ 10^9.",
+    "sampleTests": [
+      {
+        "input": "5\n4 8 2 9 1\n2\n",
+        "expectedOutput": "true\n"
+      },
+      {
+        "input": "4\n10 20 30 40\n25\n",
+        "expectedOutput": "false\n"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "1\n7\n7\n",
+        "expectedOutput": "true\n"
+      },
+      {
+        "input": "6\n5 8 5 3 5 9\n5\n",
+        "expectedOutput": "true\n"
+      },
+      {
+        "input": "5\n1 2 3 4 5\n0\n",
+        "expectedOutput": "false\n"
+      }
+    ]
+  },
+  "16": {
+    "inputFormat": "The first line contains an integer n, the number of elements. The second line contains n space-separated integers a0, a1, ..., a(n-1).",
+    "outputFormat": "If the array contains a negative number, print `First negative = x at index i`, where x is the first negative value encountered from left to right and i is its zero-based index. Otherwise, print `No negative number`. Zero is not negative.",
+    "constraints": "1 <= n <= 200000; -1000000000 <= ai <= 1000000000 for every element. The input always contains exactly n array values.",
+    "sampleTests": [
+      {
+        "input": "7\n14 3 -21 8 -17 6 11\n",
+        "expectedOutput": "First negative = -21 at index 2\n"
+      },
+      {
+        "input": "5\n4 0 8 2 1\n",
+        "expectedOutput": "No negative number\n"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "1\n-5\n",
+        "expectedOutput": "First negative = -5 at index 0\n"
+      },
+      {
+        "input": "6\n0 4 0 -1 -9 2\n",
+        "expectedOutput": "First negative = -1 at index 3\n"
+      },
+      {
+        "input": "5\n7 0 2 3 4\n",
+        "expectedOutput": "No negative number\n"
+      },
+      {
+        "input": "8\n-3 -8 0 1 -2 4 5 6\n",
+        "expectedOutput": "First negative = -3 at index 0\n"
+      }
+    ]
+  },
+  "17": {
+    "inputFormat": "The first line contains n. The second line contains n space-separated integers.",
+    "outputFormat": "Print Positive = P, Negative = N, Zero = Z on one line, with the labels and punctuation shown.",
+    "constraints": "1 ≤ n ≤ 100000; -10^9 ≤ each value ≤ 10^9.",
+    "sampleTests": [
+      {
+        "input": "5\n1 -2 0 4 0\n",
+        "expectedOutput": "Positive = 2, Negative = 1, Zero = 2\n"
+      },
+      {
+        "input": "4\n-1 -3 -5 2\n",
+        "expectedOutput": "Positive = 1, Negative = 3, Zero = 0\n"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "1\n0\n",
+        "expectedOutput": "Positive = 0, Negative = 0, Zero = 1\n"
+      },
+      {
+        "input": "5\n2 3 4 5 6\n",
+        "expectedOutput": "Positive = 5, Negative = 0, Zero = 0\n"
+      },
+      {
+        "input": "6\n-1 -2 -3 -4 -5 -6\n",
+        "expectedOutput": "Positive = 0, Negative = 6, Zero = 0\n"
+      }
+    ]
+  },
+  "18": {
+    "inputFormat": "The first line contains n. The second line contains n space-separated integers.",
+    "outputFormat": "Print the doubled values in original order, separated by single spaces.",
+    "constraints": "1 ≤ n ≤ 100000; -10^9 ≤ each value ≤ 10^9.",
+    "sampleTests": [
+      {
+        "input": "5\n1 2 3 4 5\n",
+        "expectedOutput": "2 4 6 8 10\n"
+      },
+      {
+        "input": "4\n-2 0 3 7\n",
+        "expectedOutput": "-4 0 6 14\n"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "1\n9\n",
+        "expectedOutput": "18\n"
+      },
+      {
+        "input": "5\n0 0 0 0 0\n",
+        "expectedOutput": "0 0 0 0 0\n"
+      },
+      {
+        "input": "6\n-10 -5 0 7 8 20\n",
+        "expectedOutput": "-20 -10 0 14 16 40\n"
+      }
+    ]
+  },
+  "19": {
+    "inputFormat": "The first line contains an integer n, the number of array elements. The second line contains n space-separated integers a1, a2, ..., an.",
+    "outputFormat": "Print the modified array on the first line in the format [x1, x2, ..., xn], preserving element order. Print Changed = k on the second line, where k is the number of elements whose original value was strictly greater than 10.",
+    "constraints": "1 <= n <= 100000; -1000000000 <= ai <= 1000000000. Exactly one valid test case is given. Values equal to 10 are not changed or counted.",
+    "sampleTests": [
+      {
+        "input": "7\n14 3 21 8 17 6 11\n",
+        "expectedOutput": "[10, 3, 10, 8, 10, 6, 10]\nChanged = 4"
+      },
+      {
+        "input": "5\n10 9 11 -3 10\n",
+        "expectedOutput": "[10, 9, 10, -3, 10]\nChanged = 1"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "1\n10\n",
+        "expectedOutput": "[10]\nChanged = 0"
+      },
+      {
+        "input": "3\n11 100 11\n",
+        "expectedOutput": "[10, 10, 10]\nChanged = 3"
+      },
+      {
+        "input": "5\n0 -10 10 9 -1\n",
+        "expectedOutput": "[0, -10, 10, 9, -1]\nChanged = 0"
+      },
+      {
+        "input": "6\n11 10 11 8 12 10\n",
+        "expectedOutput": "[10, 10, 10, 8, 10, 10]\nChanged = 3"
+      },
+      {
+        "input": "8\n-1000000000 1000000000 10 0 11 10 -999999999 10\n",
+        "expectedOutput": "[-1000000000, 10, 10, 0, 10, 10, -999999999, 10]\nChanged = 2"
+      }
+    ]
+  },
+  "20": {
+    "inputFormat": "The first line contains an integer n, the number of elements. The second line contains n space-separated integers a1, a2, ..., an.",
+    "outputFormat": "Print one integer: the number of array elements divisible by 3.",
+    "constraints": "1 <= n <= 100000; -1000000000 <= ai <= 1000000000. Zero and negative values are allowed. An element is divisible by 3 exactly when its remainder on division by 3 is zero.",
+    "sampleTests": [
+      {
+        "input": "7\n14 3 21 8 17 6 11\n",
+        "expectedOutput": "3\n"
+      },
+      {
+        "input": "7\n-6 -4 0 2 3 8 9\n",
+        "expectedOutput": "4\n"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "1\n-12\n",
+        "expectedOutput": "1\n"
+      },
+      {
+        "input": "1\n2\n",
+        "expectedOutput": "0\n"
+      },
+      {
+        "input": "6\n-9 -3 0 3 6 12\n",
+        "expectedOutput": "6\n"
+      },
+      {
+        "input": "8\n-8 -7 -5 1 2 4 7 10\n",
+        "expectedOutput": "0\n"
+      },
+      {
+        "input": "9\n-10 -6 -1 0 5 9 11 15 1000000000\n",
+        "expectedOutput": "4\n"
+      }
+    ]
+  },
+  "21": {
+    "inputFormat": "The first line contains an integer n. The second line contains n space-separated integers a1, a2, ..., an.",
+    "outputFormat": "Print one pair per line in the format (x,y). Print each pair of distinct array positions exactly once, with the earlier position first; thus pairs appear in nested-loop order (i from 0 to n-1, then j from i+1 to n-1). Do not add spaces inside a pair. If n=1, print nothing. Equal values at different positions are still separate elements and may produce identical-looking output lines.",
+    "constraints": "1 <= n <= 100; -1000000000 <= ai <= 1000000000 for every i.",
+    "sampleTests": [
+      {
+        "input": "4\n14 3 21 8\n",
+        "expectedOutput": "(14,3)\n(14,21)\n(14,8)\n(3,21)\n(3,8)\n(21,8)"
+      },
+      {
+        "input": "2\n-5 -5\n",
+        "expectedOutput": "(-5,-5)"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "1\n42\n",
+        "expectedOutput": ""
+      },
+      {
+        "input": "5\n7 7 7 7 7\n",
+        "expectedOutput": "(7,7)\n(7,7)\n(7,7)\n(7,7)\n(7,7)\n(7,7)\n(7,7)\n(7,7)\n(7,7)\n(7,7)"
+      },
+      {
+        "input": "3\n-8 0 11\n",
+        "expectedOutput": "(-8,0)\n(-8,11)\n(0,11)"
+      },
+      {
+        "input": "3\n1000000000 -1000000000 0\n",
+        "expectedOutput": "(1000000000,-1000000000)\n(1000000000,0)\n(-1000000000,0)"
+      }
+    ]
+  },
+  "22": {
+    "inputFormat": "The first line contains n and target. The second line contains n space-separated integers.",
+    "outputFormat": "Print true if two different indices contain values that sum to target; otherwise print false. Use lowercase.",
+    "constraints": "1 ≤ n ≤ 2000; -10^9 ≤ each value and target ≤ 10^9.",
+    "sampleTests": [
+      {
+        "input": "4 9\n2 7 11 15\n",
+        "expectedOutput": "true\n"
+      },
+      {
+        "input": "3 20\n1 4 8\n",
+        "expectedOutput": "false\n"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "2 6\n3 3\n",
+        "expectedOutput": "true\n"
+      },
+      {
+        "input": "5 0\n-3 1 2 8 -8\n",
+        "expectedOutput": "true\n"
+      },
+      {
+        "input": "1 10\n5\n",
+        "expectedOutput": "false\n"
+      }
+    ]
+  },
+  "23": {
+    "inputFormat": "The first line contains an integer n, the number of array elements. The second line contains n space-separated integers. The third line contains the target sum.",
+    "outputFormat": "Print one integer: the number of index pairs (i, j) such that i < j and the two corresponding array elements sum to the target. Each pair of indices is counted once; equal values at different indices are distinct elements.",
+    "constraints": "1 <= n <= 2000; -10^9 <= each array element <= 10^9; -2*10^9 <= target <= 2*10^9.",
+    "sampleTests": [
+      {
+        "input": "6\n5 5 10 15 0 20\n20\n",
+        "expectedOutput": "3\n"
+      },
+      {
+        "input": "4\n1 2 3 4\n5\n",
+        "expectedOutput": "2\n"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "5\n2 2 2 2 2\n4\n",
+        "expectedOutput": "10\n"
+      },
+      {
+        "input": "6\n-3 7 0 10 -10 3\n0\n",
+        "expectedOutput": "2\n"
+      },
+      {
+        "input": "4\n1 2 4 8\n16\n",
+        "expectedOutput": "0\n"
+      },
+      {
+        "input": "5\n0 0 1 -1 0\n0\n",
+        "expectedOutput": "4\n"
+      },
+      {
+        "input": "4\n1 9 9 1\n10\n",
+        "expectedOutput": "4\n"
+      }
+    ]
+  },
+  "24": {
+    "inputFormat": "The first line contains an integer n, the number of array elements. The second line contains n space-separated integers.",
+    "outputFormat": "Print each distinct value that occurs more than once, one value per line, ordered by its first appearance in the input array. Print None if no value occurs more than once.",
+    "constraints": "1 <= n <= 1000; -1000000000 <= each array value <= 1000000000. All inputs contain exactly n integers after n.",
+    "sampleTests": [
+      {
+        "input": "6\n10 20 30 20 40 10\n",
+        "expectedOutput": "10\n20\n"
+      },
+      {
+        "input": "5\n1 2 3 4 5\n",
+        "expectedOutput": "None\n"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "5\n7 7 7 7 7\n",
+        "expectedOutput": "7\n"
+      },
+      {
+        "input": "8\n-3 4 -3 4 4 9 -3 9\n",
+        "expectedOutput": "-3\n4\n9\n"
+      },
+      {
+        "input": "5\n2 1 2 3 1\n",
+        "expectedOutput": "2\n1\n"
+      },
+      {
+        "input": "1\n-1000000000\n",
+        "expectedOutput": "None\n"
+      }
+    ]
+  },
+  "25": {
+    "inputFormat": "The first line contains n. The second line contains n space-separated integers.",
+    "outputFormat": "Print true if values are in non-decreasing order; otherwise print false. Use lowercase.",
+    "constraints": "1 ≤ n ≤ 100000; -10^9 ≤ each value ≤ 10^9.",
+    "sampleTests": [
+      {
+        "input": "5\n1 2 2 4 8\n",
+        "expectedOutput": "true\n"
+      },
+      {
+        "input": "4\n1 5 3 8\n",
+        "expectedOutput": "false\n"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "1\n99\n",
+        "expectedOutput": "true\n"
+      },
+      {
+        "input": "5\n-5 -2 0 4 9\n",
+        "expectedOutput": "true\n"
+      },
+      {
+        "input": "6\n1 2 3 5 4 6\n",
+        "expectedOutput": "false\n"
+      }
+    ]
+  }
+}
