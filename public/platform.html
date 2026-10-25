@@ -8,10 +8,10 @@
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="platform.css">
 <script>
-  /* Instant routing — runs before body renders to avoid flash */
+  /* Instant routing — show correct screen before body renders, no flash */
   (function(){
     var isAdmin = location.pathname==='/control-room' || location.search.includes('admin');
-    if(isAdmin) document.documentElement.setAttribute('data-route','admin');
+    document.documentElement.setAttribute('data-route', isAdmin ? 'admin' : 'candidate');
   })();
 </script>
 </head>
@@ -48,7 +48,7 @@
   <!-- ══════════════════════════════════════════
        SCREEN 1: CANDIDATE LANDING / LOGIN
   ══════════════════════════════════════════ -->
-  <section id="landing" class="screen hidden">
+  <section id="landing" class="screen">
     <div class="landing-layout">
 
       <!-- Left: branding copy -->

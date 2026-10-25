@@ -1981,3 +1981,15 @@ details[open] .answer-review summary::before { transform: rotate(90deg); }
 .candidate-review-card {
   position: relative;
 }
+
+/* ── Instant route-based visibility (no JS flash) ── */
+/* On admin route: hide landing immediately, show admin-login */
+html[data-route="admin"] #landing { display: none !important; }
+html[data-route="admin"] #admin-login { display: flex !important; }
+html[data-route="admin"] #dashboard { display: none !important; }
+html[data-route="admin"] #exam { display: none !important; }
+
+/* On candidate route: show landing, hide others */
+html[data-route="candidate"] #admin-login { display: none !important; }
+html[data-route="candidate"] #dashboard { display: none !important; }
+html[data-route="candidate"] #exam { display: none !important; }

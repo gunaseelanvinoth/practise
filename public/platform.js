@@ -3,18 +3,8 @@
 ============================================================ */
 (() => {
 
-/* ─── Instant routing (runs before anything else) ─────── */
-const _isAdmin = location.pathname==='/control-room'||location.search.includes('admin');
-document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
-if (_isAdmin) {
-  const el = document.getElementById('admin-login');
-  if (el) el.classList.remove('hidden');
-} else {
-  const el = document.getElementById('landing');
-  if (el) el.classList.remove('hidden');
-}
-
 /* ─── Utilities ──────────────────────────────────────────── */
+const _isAdmin = location.pathname==='/control-room'||location.search.includes('admin');
 const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c =>
@@ -91,6 +81,7 @@ setLanguageOptions();
 
 /* ─── Screens ────────────────────────────────────────────── */
 function show(id) {
+  document.documentElement.removeAttribute('data-route');
   $$('.screen').forEach(x => x.classList.toggle('hidden', x.id !== id));
 }
 
@@ -830,7 +821,9 @@ function renderReview(a) {
             const ev=ans?.testEvaluation;
             const mc=measuredCases(ev);
             const pct=mc.total?Math.round(mc.passed/mc.total*100):null;
-            return`<div class="rqm-tile ${cls}" data-rqid="${qid}" title="Q${i+1}: ${cls==='rqm-submitted'?'Submitted':'cls==='rqm-saved'?'Saved':'Not attempted'}${pct!=null?` · ${pct}% cases passed`:''}">
+            const statusLbl = cls==='rqm-submitted'?'Submitted':(cls==='rqm-saved'?'Saved':'Not attempted');
+            const pctLbl = pct!=null ? ` · ${pct}% cases passed` : '';
+            return`<div class="rqm-tile ${cls}" data-rqid="${qid}" title="Q${i+1}: ${statusLbl}${pctLbl}">
               <span class="rqm-num">${i+1}</span>
               ${pct!=null?`<span class="rqm-pct">${pct}%</span>`:''}
             </div>`;
@@ -932,5 +925,4 @@ if (_isAdmin) {
 } else {
   if (sessionStorage.getItem('candidate-token')) enterExam();
 }
-
 })();
