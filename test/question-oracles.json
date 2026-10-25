@@ -13,5 +13,65 @@
     "referencePython": "import sys\n\ndata = list(map(int, sys.stdin.buffer.read().split()))\nn = data[0]\ntotal = sum(data[1:1 + n])\nscale = 10**6\nq, r = divmod(abs(total) * scale, n)\nif 2 * r >= n:\n    q += 1\nwhole, frac = divmod(q, scale)\nsign = '-' if total < 0 and q != 0 else ''\nprint(f\"{sign}{whole}.{frac:06d}\")\n",
     "incorrectPython": "import sys\n\ndata = list(map(int, sys.stdin.buffer.read().split()))\nn = data[0]\ntotal = sum(data[1:1 + n])\nprint(f\"{total // n:.6f}\")\n",
     "mutationRationale": "The mutant applies integer floor division before formatting, discarding the fractional part and flooring negative averages."
+  },
+  "7": {
+    "referencePython": "import sys\n\ndata = list(map(int, sys.stdin.buffer.read().split()))\nn = data[0]\na = data[1:1 + n]\nmx = mn = a[0]\nfor x in a[1:]:\n    if x > mx:\n        mx = x\n    if x < mn:\n        mn = x\nprint(f\"Max = {mx}, Min = {mn}\")\n",
+    "incorrectPython": "import sys\n\ndata = list(map(int, sys.stdin.buffer.read().split()))\nn = data[0]\na = data[1:1 + n]\nmx = 0\nmn = 0\nfor x in a:\n    if x > mx:\n        mx = x\n    if x < mn:\n        mn = x\nprint(f\"Max = {mx}, Min = {mn}\")\n",
+    "mutationRationale": "The mutant initializes both extrema to zero rather than an array value, so all-negative or all-positive inputs can produce an endpoint that is not present in the array."
+  },
+  "8": {
+    "referencePython": "import sys\n\ndata = list(map(int, sys.stdin.buffer.read().split()))\nn = data[0]\nfirst = second = None\nfor x in data[1:1 + n]:\n    if first is None or x > first:\n        second = first\n        first = x\n    elif x < first and (second is None or x > second):\n        second = x\nprint(second)",
+    "incorrectPython": "import sys\n\ndata = list(map(int, sys.stdin.buffer.read().split()))\nn = data[0]\nfirst = second = None\nfor x in data[1:1 + n]:\n    if first is None or x > first:\n        first = x\n        second = first\n    elif x < first and (second is None or x > second):\n        second = x\nprint(second)",
+    "mutationRationale": "When a new maximum appears, the mutant assigns it to first before updating second, so it can report the maximum instead of the second-largest distinct value."
+  },
+  "9": {
+    "referencePython": "import sys\ndata = list(map(int, sys.stdin.buffer.read().split()))\nn = data[0]\narr = data[1:1 + n]\nprint(sum(x > 10 for x in arr))\n",
+    "incorrectPython": "import sys\ndata = list(map(int, sys.stdin.buffer.read().split()))\nn = data[0]\narr = data[1:1 + n]\nprint(sum(x >= 10 for x in arr))\n",
+    "mutationRationale": "The mutant counts values equal to 10 by using >= instead of the required strict >; sample case 2 catches the boundary error."
+  },
+  "10": {
+    "referencePython": "import sys\ndata = list(map(int, sys.stdin.buffer.read().split()))\nn = data[0]\na = data[1:1 + n]\neven = sum(x % 2 == 0 for x in a)\nodd = n - even\nprint(f\"Even = {even}, Odd = {odd}\")",
+    "incorrectPython": "import sys\ndata = list(map(int, sys.stdin.buffer.read().split()))\nn = data[0]\neven = odd = 0\nfor x in data[1:1 + n]:\n    if x != 0 and x % 2 == 0:\n        even += 1\n    else:\n        odd += 1\nprint(f\"Even = {even}, Odd = {odd}\")",
+    "mutationRationale": "The mutant treats zero as odd by excluding it from the even branch; the zero-containing sample and hidden cases catch the error."
+  },
+  "11": {
+    "referencePython": "import sys\n\ndata = list(map(int, sys.stdin.buffer.read().split()))\nn = data[0]\narr = data[1:1 + n]\nkey = data[1 + n]\nprint(sum(value == key for value in arr))\n",
+    "incorrectPython": "import sys\n\ndata = list(map(int, sys.stdin.buffer.read().split()))\nn = data[0]\narr = data[1:1 + n]\nkey = data[1 + n]\ncount = 0\nfor value in arr:\n    if value == key:\n        count += 1\n        break\nprint(count)\n",
+    "mutationRationale": "The mutant stops after its first match and returns an existence count rather than counting every occurrence; duplicate-key tests catch it."
+  },
+  "12": {
+    "referencePython": "import sys\ndata = list(map(int, sys.stdin.buffer.read().split()))\nn = data[0]\na = data[1:1 + n]\nprint(sum(a[::2]))",
+    "incorrectPython": "import sys\ndata = list(map(int, sys.stdin.buffer.read().split()))\nn = data[0]\na = data[1:1 + n]\nprint(sum(x for x in a if x % 2 == 0))",
+    "mutationRationale": "The mutant selects values that are even instead of positions with even zero-based indices; an all-odd input demonstrates the distinction."
+  },
+  "16": {
+    "referencePython": "import sys\n\ndata = list(map(int, sys.stdin.buffer.read().split()))\nn = data[0]\na = data[1:1 + n]\nfor i, x in enumerate(a):\n    if x < 0:\n        print(f\"First negative = {x} at index {i}\")\n        break\nelse:\n    print(\"No negative number\")\n",
+    "incorrectPython": "import sys\n\ndata = list(map(int, sys.stdin.buffer.read().split()))\nn = data[0]\na = data[1:1 + n]\nfound = False\nfor i, x in enumerate(a):\n    if x < 0:\n        print(f\"First negative = {x} at index {i}\")\n        found = True\nif not found:\n    print(\"No negative number\")\n",
+    "mutationRationale": "The mutant prints every negative instead of stopping after the first one, so arrays with multiple negatives produce extra output."
+  },
+  "19": {
+    "referencePython": "import sys\n\ndata = list(map(int, sys.stdin.buffer.read().split()))\nn = data[0]\narr = data[1:1 + n]\nchanged = 0\nfor i, value in enumerate(arr):\n    if value > 10:\n        arr[i] = 10\n        changed += 1\nprint('[' + ', '.join(map(str, arr)) + ']')\nprint(f'Changed = {changed}')\n",
+    "incorrectPython": "import sys\n\ndata = list(map(int, sys.stdin.buffer.read().split()))\nn = data[0]\narr = data[1:1 + n]\nchanged = 0\nfor i, value in enumerate(arr):\n    if value >= 10:\n        arr[i] = 10\n        changed += 1\nprint('[' + ', '.join(map(str, arr)) + ']')\nprint(f'Changed = {changed}')\n",
+    "mutationRationale": "The mutant clamps and counts values equal to 10 as changed, despite the task requiring only values strictly greater than 10."
+  },
+  "20": {
+    "referencePython": "import sys\n\ndata = list(map(int, sys.stdin.buffer.read().split()))\nn = data[0]\na = data[1:1 + n]\nprint(sum(x % 3 == 0 for x in a))\n",
+    "incorrectPython": "import sys\n\ndata = list(map(int, sys.stdin.buffer.read().split()))\nn = data[0]\na = data[1:1 + n]\nprint(sum(x / 3 == 0 for x in a))\n",
+    "mutationRationale": "The mutant checks whether the quotient is zero rather than whether the remainder is zero, missing nonzero multiples of 3."
+  },
+  "21": {
+    "referencePython": "import sys\n\ndata = list(map(int, sys.stdin.buffer.read().split()))\nn = data[0]\na = data[1:1 + n]\npairs = []\nfor i in range(n):\n    for j in range(i + 1, n):\n        pairs.append(f\"({a[i]},{a[j]})\")\nif pairs:\n    sys.stdout.write(\"\\n\".join(pairs))\n",
+    "incorrectPython": "import sys\n\ndata = list(map(int, sys.stdin.buffer.read().split()))\nn = data[0]\na = data[1:1 + n]\npairs = []\nfor i in range(n):\n    for j in range(i, n):  # Incorrectly includes pairing an element with itself\n        pairs.append(f\"({a[i]},{a[j]})\")\nif pairs:\n    sys.stdout.write(\"\\n\".join(pairs))\n",
+    "mutationRationale": "The mutant starts its inner loop at j=i, printing self-pairs in addition to the required distinct-position pairs."
+  },
+  "23": {
+    "referencePython": "import sys\n\ndata = list(map(int, sys.stdin.buffer.read().split()))\nn = data[0]\narr = data[1:1 + n]\ntarget = data[1 + n]\ncount = 0\nfor i in range(n):\n    for j in range(i + 1, n):\n        if arr[i] + arr[j] == target:\n            count += 1\nprint(count)",
+    "incorrectPython": "import sys\n\ndata = list(map(int, sys.stdin.buffer.read().split()))\nn = data[0]\narr = data[1:1 + n]\ntarget = data[1 + n]\ncount = 0\nfor i in range(n):\n    for j in range(i + 1, n):\n        if arr[i] + arr[j] == target:\n            count += 1\n            break\nprint(count)",
+    "mutationRationale": "The mutant breaks after the first matching partner for each i, missing further valid index pairs with that first element."
+  },
+  "24": {
+    "referencePython": "import sys\ndata = list(map(int, sys.stdin.buffer.read().split()))\nn = data[0]\na = data[1:1 + n]\nans = []\nfor i in range(n):\n    found_later = False\n    for j in range(i + 1, n):\n        if a[i] == a[j]:\n            found_later = True\n            break\n    appeared_earlier = False\n    for k in range(i):\n        if a[i] == a[k]:\n            appeared_earlier = True\n            break\n    if found_later and not appeared_earlier:\n        ans.append(str(a[i]))\nprint('\\n'.join(ans) if ans else 'None')",
+    "incorrectPython": "import sys\ndata = list(map(int, sys.stdin.buffer.read().split()))\nn = data[0]\na = data[1:1 + n]\nans = []\nfor i in range(n):\n    for j in range(i + 1, n):\n        if a[i] == a[j]:\n            ans.append(str(a[i]))\n            break\nprint('\\n'.join(ans) if ans else 'None')",
+    "mutationRationale": "The mutant reports a repeated value at each occurrence rather than suppressing values already reported, so values with multiple duplicates appear more than once."
   }
 }

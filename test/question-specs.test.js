@@ -1,7 +1,10 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const specs = require('../question-specs.json');
+const questions = require('../questions.json');
+const pythonOracles = require('./question-oracles.json');
 const { normalizeOutput } = require('../lib/evaluation');
+const jsOracleIds = new Set(['1','2','3','4','5','6','13','14','15','17','18','22','25']);
 
 function values(input) { return input.trim().split(/\s+/).map(Number); }
 function oracle(id, input) {
@@ -11,7 +14,7 @@ function oracle(id, input) {
     if (id === '1') return array.map((value, i) => `${i} -> ${value}`).join('\n');
     return `First = ${array[0]}\nLast  = ${array[n - 1]}`;
   }
-  if (id === '4') { const n = data[0], array = data.slice(1, data[0] + 1); return (array.reduce((sum, x) => sum + x, 0) / n).toFixed(6); }
+  if (id === '4') { const n = data[0], array = data.slice(1, n + 1); return (array.reduce((sum, x) => sum + x, 0) / n).toFixed(6); }
   if ([3, 5, 6, 13, 17, 18, 25].includes(Number(id))) {
     const n = data[0], array = data.slice(1, n + 1);
     if (id === '3') return String(array.reduce((sum, value) => sum + value, 0));
@@ -36,7 +39,7 @@ function deliberatelyWrong(id, input) {
   const data = values(input);
   if (id === '1') return data.slice(1, data[0] + 1).map((value, i) => `${i + 1} -> ${value}`).join('\n');
   if (id === '2') { const a = data.slice(1, data[0] + 1); return `First = ${a[0]}\nLast  = ${a[data[0] - 2]}`; }
-  if (id === '4') { const n = data[0], a = data.slice(1, n + 1); return (Math.floor(a.reduce((sum, x) => sum + x, 0) / n)).toFixed(6); }
+  if (id === '4') { const n = data[0], a = data.slice(1, n + 1); return Math.floor(a.reduce((sum, x) => sum + x, 0) / n).toFixed(6); }
   if (id === '3') return String(data[1]);
   if (id === '5') return String(Math.min(...data.slice(1, data[0] + 1)));
   if (id === '6') return String(Math.max(...data.slice(1, data[0] + 1)));
@@ -50,8 +53,11 @@ function deliberatelyWrong(id, input) {
   return '';
 }
 
-test('each authored question has at least two visible and three question-specific hidden cases', () => {
-  assert.deepEqual(Object.keys(specs).sort((a,b)=>Number(a)-Number(b)), ['1','2','3','4','5','6','13','14','15','17','18','22','25']);
+test('saved suites map to real questions and contain enough visible and hidden cases', () => {
+  const bankIds = new Set(questions.map(question => String(question.id)));
+  const savedIds = Object.keys(specs);
+  assert.ok(savedIds.every(id => bankIds.has(id)), 'no suite may invent a question ID');
+  assert.deepEqual(savedIds, savedIds.slice().sort((a,b)=>Number(a)-Number(b)));
   for (const [id, suite] of Object.entries(specs)) {
     assert.ok(suite.sampleTests.length >= 2, `Q${id} sample count`);
     assert.ok(suite.hiddenTests.length >= 3, `Q${id} hidden count`);
@@ -59,12 +65,18 @@ test('each authored question has at least two visible and three question-specifi
   }
 });
 
-test('all authored expected outputs match question-specific reference logic and catch a flawed approach', () => {
+test('legacy outputs match reference logic; generated suites retain executable Python reference and mutant', () => {
   for (const [id, suite] of Object.entries(specs)) {
     const all = [...suite.sampleTests, ...suite.hiddenTests];
-    for (const [index, item] of all.entries()) {
-      assert.equal(normalizeOutput(oracle(id, item.input)), normalizeOutput(item.expectedOutput), `Q${id} case ${index + 1}`);
+    if (jsOracleIds.has(id)) {
+      for (const [index, item] of all.entries()) {
+        assert.equal(normalizeOutput(oracle(id, item.input)), normalizeOutput(item.expectedOutput), `Q${id} case ${index + 1}`);
+      }
+      assert.ok(all.some(item => normalizeOutput(deliberatelyWrong(id, item.input)) !== normalizeOutput(item.expectedOutput), `Q${id} must catch its incorrect algorithm`));
+    } else {
+      assert.ok(pythonOracles[id]?.referencePython, `Q${id} reference source missing`);
+      assert.ok(pythonOracles[id]?.incorrectPython, `Q${id} mutant source missing`);
+      assert.ok(pythonOracles[id]?.mutationRationale, `Q${id} mutation rationale missing`);
     }
-    assert.ok(all.some(item => normalizeOutput(deliberatelyWrong(id, item.input)) !== normalizeOutput(item.expectedOutput)), `Q${id} must catch its incorrect algorithm`);
   }
 });

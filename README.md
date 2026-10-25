@@ -149,13 +149,13 @@ npm.cmd test
 
 This runs the offline unit tests for grading, hidden-data projection, CSV shape, and question-suite quality.
 
-After question-suite authoring is complete, verify every reference and intentionally flawed program locally with Python 3:
+Verify every saved reference and intentionally flawed program locally with Python 3. Use `--allow-partial` for an incremental checkpoint; omit it when all 100 question suites are present:
 
 ```bash
-python3 scripts/verify-question-specs.py
+python3 scripts/verify-question-specs.py --allow-partial
 ```
 
-On Windows, run it with `py -3 scripts/verify-question-specs.py`. It executes reference and mutant programs against every sample and hidden case without contacting Judge0.
+On Windows, run it with `py -3 scripts/verify-question-specs.py --allow-partial`. It executes reference and mutant programs against every saved sample and hidden case without contacting Judge0. See `REMAINING-QUESTIONS.md` for the current coverage snapshot.
 
 Two opt-in integration commands submit test programs to Judge0 (internet access required):
 
@@ -170,7 +170,7 @@ Both `npm` commands explicitly opt in to external code execution. The live scrip
 
 ## ⚠️ Notes
 
-- **Question data coverage** — thirteen existing questions (IDs 1, 2, 3, 4, 5, 6, 13, 14, 15, 17, 18, 22 and 25) have authored input/output formats, visible samples and question-specific hidden tests. The other legacy questions are retained; coverage is being completed from their actual problem statements rather than treating fixed tutorial examples as executable tests.
+- **Question data coverage** — 25 of 100 questions (IDs 1–25) have authored input/output formats, visible samples and question-specific hidden tests. The other 75 questions remain to be authored from their actual problem statements; see `REMAINING-QUESTIONS.md`.
 - **Judge0 public instance** may have rate limits. For heavy use, provision your own Judge0 instance.
 - **Local data** is stored in `data/state.json` (created automatically, git-ignored).
 - **Production data** requires Upstash Redis. The platform shows a clear error if the database is not configured.

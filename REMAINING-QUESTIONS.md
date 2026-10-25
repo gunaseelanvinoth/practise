@@ -1,0 +1,111 @@
+# Remaining DSA questions
+
+Checkpoint snapshot: 2026-10-25. The GitHub feature branch contains executable suites for 25 of 100 questions; 75 remain. This file records the exact remaining bank IDs/titles for resumption.
+
+## Completed suite IDs
+
+- 1: Print every element with its index
+- 2: Print the first and the last element
+- 3: Sum of all elements
+- 4: Average of the array
+- 5: Find the maximum element
+- 6: Find the minimum element
+- 7: Find maximum and minimum in one pass
+- 8: Second largest element without sorting
+- 9: Count elements greater than 10
+- 10: Count even and odd numbers
+- 11: Count how many times a value appears
+- 12: Sum of elements at even indices
+- 13: Reverse the array in place
+- 14: Linear search — return the index
+- 15: Check whether a value exists
+- 16: Find the first negative number
+- 17: Count positive, negative and zero
+- 18: Double every element in the array
+- 19: Cap every value at 10
+- 20: Count elements divisible by 3
+- 21: Print all pairs in the array
+- 22: Brute force pair sum — does a pair exist?
+- 23: Count all pairs with a given sum
+- 24: Find duplicates using nested loops
+- 25: Check whether the array is already sorted
+
+## Remaining suite IDs and titles
+
+- 26: Bubble sort — write it yourself
+- 27: Selection sort
+- 28: Insertion sort
+- 29: Sort using the built-in sort
+- 30: Sort in descending order
+- 31: Kth smallest and Kth largest element
+- 32: Remove duplicates from a sorted array
+- 33: Find the median of an array
+- 34: Count distinct elements after sorting
+- 35: Check whether two arrays contain the same elements
+- 36: Palindrome check with two pointers
+- 37: Pair sum with two pointers
+- 38: Count all pairs with a given sum — two pointers
+- 39: Pair with the sum closest to the target
+- 40: Move all zeros to the end
+- 41: Move all negative numbers to the left
+- 42: Merge two sorted arrays
+- 43: Squares of a sorted array, still sorted
+- 44: Triplet sum — find three numbers adding to a target
+- 45: Container with the most water
+- 46: Check whether one string is a subsequence of another
+- 47: Reverse only the vowels in a string
+- 48: Two sum on a sorted array — return original indices
+- 49: Sort an array of 0s and 1s
+- 50: Sort an array of 0s, 1s and 2s (Dutch flag)
+- 51: HashSet basics — store and check instantly
+- 52: Find duplicates using a HashSet
+- 53: Count distinct elements with a HashSet
+- 54: First repeating element
+- 55: Frequency of every element (HashMap)
+- 56: First non-repeating element
+- 57: Most frequent element
+- 58: Two Sum — the optimised HashMap solution
+- 59: Check whether two arrays are anagrams
+- 60: Union and intersection of two arrays
+- 61: Find the missing number from 1 to n
+- 62: Count pairs with a given difference
+- 63: Duplicate within k positions
+- 64: Longest run of consecutive numbers
+- 65: Check whether an array contains any duplicate
+- 66: Build a prefix sum array
+- 67: Range sum queries using prefix sum
+- 68: Equilibrium index
+- 69: Count subarrays with sum equal to k
+- 70: Longest subarray with sum k
+- 71: Does a subarray with sum zero exist?
+- 72: Product of array except self
+- 73: Split the array into two equal-sum halves
+- 74: Count subarrays with an even sum
+- 75: Maximum subarray sum (Kadane)
+- 76: Maximum sum of a subarray of size k
+- 77: Minimum sum of a subarray of size k
+- 78: Average of every window of size k
+- 79: First negative number in every window of size k
+- 80: Maximum vowels in a substring of size k
+- 81: Smallest subarray with sum at least target
+- 82: Longest substring without repeating characters
+- 83: Longest subarray with at most k distinct values
+- 84: Longest run of 1s after flipping at most k zeros
+- 85: Longest subarray with sum at most k
+- 86: Count windows of size k with sum above a threshold
+- 87: Maximum of every window of size k
+- 88: Binary search on a sorted array
+- 89: First occurrence of a repeated value
+- 90: Last occurrence of a repeated value
+- 91: Count occurrences in a sorted array
+- 92: Insert position in a sorted array
+- 93: Integer square root using binary search
+- 94: Search in a rotated sorted array
+- 95: Find a peak element
+- 96: Find the middle element with fast and slow pointers
+- 97: Detect a cycle in a linked list
+- 98: Happy number
+- 99: Find the duplicate number without modifying the array
+- 100: Nth node from the end in one pass
+
+Resume on branch `manus/dsa-online-platform-upgrade`. Run `npm test` and `python3 scripts/verify-question-specs.py --allow-partial` to verify the checkpoint. The verifier without `--allow-partial` requires complete coverage of all 100 questions.
