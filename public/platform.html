@@ -1,4 +1,377 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DSA Assessment · Candidate</title><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="platform.css"></head><body><header class="top"><a class="brand" href="/">DSA<span> / ASSESSMENT</span></a><div class="topright"><span id="global-status" class="badge"><i></i> CHECKING TEST</span></div></header><main><section id="landing" class="screen"><div class="login-card"><div class="eyebrow">CANDIDATE LOGIN</div><h1>Enter test</h1><p id="closed-note" class="closed-note hidden">Test is closed.</p><label>Name<input id="candidate-name" autocomplete="name" placeholder="Your name" maxlength="70"></label><button id="join" class="btn primary" disabled>Start test <span>→</span></button></div></section>
-<section id="admin-login" class="screen hidden"><div class="admin-login-card"><div class="eyebrow">RESTRICTED ACCESS</div><h1>Admin <em>control room</em></h1><p>Sign in with the private admin password printed by the server when it first starts.</p><label>Admin password<input id="admin-password" type="password" autocomplete="current-password"></label><button id="admin-signin" class="btn primary">Open dashboard →</button><button class="quiet" data-home>← Candidate portal</button><p id="admin-error" class="error"></p></div></section>
-<section id="dashboard" class="screen hidden"><div class="dash-head"><div><div class="eyebrow">ASSESSMENT CONTROL ROOM</div><h1>Live <em>overview</em></h1><p>Candidate activity refreshes automatically every three seconds.</p></div><button id="admin-logout" class="btn ghost">Sign out</button></div><div class="control-row"><div class="test-toggle panel"><div><div class="eyebrow">CANDIDATE ACCESS</div><b id="access-title">Test closed</b><small id="access-subtitle">Candidates cannot start while closed</small></div><button id="toggle-test" class="switch off" aria-label="Toggle test access"><i></i></button></div><div class="panel settings"><label>Question set<select id="set-setting"><option value="A">Set A</option><option value="B">Set B</option></select></label><label>Test duration<select id="duration-setting"><option value="60">1 hour</option><option value="120">2 hours</option><option value="180">3 hours</option><option value="240">4 hours</option><option value="300">5 hours</option><option value="360">6 hours</option></select></label><label>Questions<select id="count-setting"><option value="10">10 questions</option><option value="20">20 questions</option><option value="30">30 questions</option><option value="40">40 questions</option><option value="50">50 questions</option></select></label><span id="settings-saved">SETTINGS SAVED</span></div></div><div class="metric-grid" id="metrics"></div><div class="dashboard-grid"><section class="panel candidates-panel"><div class="section-title"><div><div class="eyebrow">CANDIDATE MONITORING</div><h2>Live candidates</h2></div><span class="live-dot">LIVE</span></div><div id="candidate-table"></div></section><aside class="panel integrity-panel"><div class="eyebrow">ASSESSMENT NOTES</div><h2>Sample vs test suite</h2><p>Run sample checks only the visible example. Submit answer runs the private admin cases. A sample pass is not a full-correctness result.</p><div class="legend"><span class="green">● Online · under 15 sec</span><span class="amber">● Idle · 15–60 sec</span><span class="red">● Offline · over 60 sec</span></div><p class="small-note">The imported tutorial does not provide validated hidden cases for every question. Configure admin cases before relying on automatic marks.</p></aside></div><section class="panel question-analytics"><div class="section-title"><div><div class="eyebrow">QUESTION INSIGHTS</div><h2>Question progress</h2></div><span id="question-count-badge" class="live-dot">0 QUESTIONS</span></div><p class="small-note">Select a question to see submissions, test case results, and correctness.</p><div class="question-filters"><button id="question-filter-attempted" class="question-filter active" data-qfilter="attempted">Attempted</button><button id="question-filter-all" class="question-filter" data-qfilter="all">All assigned</button></div><div id="question-cards" class="question-cards"></div></section><div id="question-modal" class="question-modal hidden" role="dialog" aria-modal="true" aria-label="Question test results"><div class="question-modal-shade"><article id="question-modal-content" class="question-modal-card"></article></div></div><section class="panel case-manager"><div class="eyebrow">QUESTION BANK</div><h2>Test cases</h2><p>Set up to twenty input/output checks per question. Cases stay private from candidates.</p><label for="case-question">Question</label><select id="case-question"></select><div id="case-rows"></div><div class="case-actions"><button id="add-case" class="btn ghost">Add test case</button><button id="save-cases" class="btn primary">Save cases</button><span id="case-save-state"></span></div></section><div id="review-area"></div></section>
-<section id="exam" class="screen hidden"><div class="exam-head"><div><span class="eyebrow" id="exam-set">SET A</span><h1 id="candidate-greeting">Assessment</h1></div><div class="exam-clock"><span>TIME REMAINING</span><b id="timer">--:--:--</b></div></div><div class="exam-grid"><aside class="question-rail panel"><div class="eyebrow">QUESTIONS</div><div id="question-nav" class="question-nav"></div><div class="rail-note"><span class="legend-square answered"></span> Code saved</div></aside><article class="question-panel panel"><div class="question-meta"><span id="question-position">QUESTION 1 / 50</span><div id="question-tags"></div></div><h2 id="question-title">Loading question…</h2><div id="question-statement" class="statement"></div><div class="sample-wrap"><div class="sample-head">PUBLIC SAMPLE <span>Example only</span></div><pre id="question-sample">No sample data supplied.</pre><p class="sample-guidance">Run sample checks this visible example only. Submit answer runs the admin-configured test suite; a sample pass alone is not full correctness.</p></div><div class="editor-heading"><div><label for="language">LANGUAGE</label><select id="language"></select></div><span id="save-state">ALL CHANGES SAVED</span></div><div class="editor-stage"><pre id="highlight" aria-hidden="true"><code id="highlight-code"></code></pre><textarea id="code" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="Write your solution here…" aria-label="Code editor"></textarea></div><div class="editor-foot"><span>Code runs on Judge0 CE · Source is sent to the judge service</span><span id="run-state"></span></div><div id="output-box" class="output-box hidden"><div id="output-title">RUN RESULT</div><pre id="output-text"></pre></div><div class="exam-controls"><button id="run-code" class="btn ghost">▶ Run sample</button><button id="submit-code" class="btn primary">Submit answer</button><div class="spacer"></div><button id="prev-question" class="btn ghost">← Previous</button><button id="next-question" class="btn ghost">Next →</button><button id="finish-exam" class="btn danger">Finish test</button></div></article></div></section></main><footer><span>DSA PRACTICE LAB</span><span>Private assessment workspace</span></footer><script src="platform.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CodeArena · DSA Assessment</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="platform.css">
+</head>
+<body>
+
+<!-- Animated background -->
+<canvas id="particle-canvas" aria-hidden="true"></canvas>
+<div class="aurora-layer" aria-hidden="true">
+  <div class="aurora-orb orb1"></div>
+  <div class="aurora-orb orb2"></div>
+  <div class="aurora-orb orb3"></div>
+</div>
+
+<!-- Toast container -->
+<div id="toast-container" aria-live="polite"></div>
+
+<!-- Top navigation bar -->
+<header class="topbar">
+  <a class="brand" href="/">
+    <span class="brand-icon">⬡</span>
+    <span class="brand-name">Code<em>Arena</em></span>
+    <span class="brand-tag">DSA ASSESSMENT</span>
+  </a>
+  <div class="topbar-right">
+    <div id="global-status" class="status-badge">
+      <span class="status-dot"></span>
+      <span class="status-text">CHECKING TEST</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ══════════════════════════════════════════
+       SCREEN 1: CANDIDATE LANDING / LOGIN
+  ══════════════════════════════════════════ -->
+  <section id="landing" class="screen">
+    <div class="landing-layout">
+
+      <!-- Left: branding copy -->
+      <div class="landing-copy">
+        <div class="eyebrow-badge">🏆 LIVE ASSESSMENT PLATFORM</div>
+        <h1>Prove Your<br><em>DSA Mastery</em></h1>
+        <p class="lead">Real-time coding challenges. Write, run, and submit solutions across C, C++, Java, Python &amp; JavaScript.</p>
+        <div class="feature-list">
+          <div class="feature-item"><span class="feat-icon">⚡</span><span>Live code execution via Judge0</span></div>
+          <div class="feature-item"><span class="feat-icon">📊</span><span>Automatic grading with private test suites</span></div>
+          <div class="feature-item"><span class="feat-icon">🔒</span><span>Secure, time-limited assessment</span></div>
+          <div class="feature-item"><span class="feat-icon">💾</span><span>Autosave — never lose your progress</span></div>
+        </div>
+        <button class="admin-link" onclick="showAdminLogin()">Administrator access →</button>
+      </div>
+
+      <!-- Right: login card -->
+      <div class="login-card glass-card">
+        <div class="card-header">
+          <div class="eyebrow">CANDIDATE LOGIN</div>
+          <h2>Enter Test</h2>
+          <p id="assigned-set" class="card-subtext">Your question set is assigned by the administrator.</p>
+        </div>
+
+        <div id="closed-note" class="alert-box alert-warning hidden">
+          <span class="alert-icon">⚠</span>
+          <span>The assessment is closed. Ask the administrator to open it.</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="candidate-name">Full Name</label>
+          <div class="input-wrapper">
+            <span class="input-icon">👤</span>
+            <input id="candidate-name" class="form-input" type="text" autocomplete="name"
+              placeholder="Enter your full name" maxlength="70">
+          </div>
+        </div>
+
+        <button id="join" class="btn btn-primary btn-full" disabled>
+          <span>Start Assessment</span>
+          <span class="btn-arrow">→</span>
+        </button>
+
+        <p class="fine-text">By starting, you agree that your code will be evaluated by the administrator.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SCREEN 2: ADMIN LOGIN
+  ══════════════════════════════════════════ -->
+  <section id="admin-login" class="screen hidden">
+    <div class="center-layout">
+      <div class="admin-login-card glass-card">
+        <div class="card-header">
+          <div class="eyebrow">🔐 RESTRICTED ACCESS</div>
+          <h2>Admin <em>Control Room</em></h2>
+          <p>Sign in with the administrator password to access the dashboard.</p>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="admin-password">Admin Password</label>
+          <div class="input-wrapper">
+            <span class="input-icon">🔑</span>
+            <input id="admin-password" class="form-input" type="password"
+              autocomplete="current-password" placeholder="Enter admin password">
+          </div>
+        </div>
+
+        <p id="admin-error" class="error-text"></p>
+
+        <button id="admin-signin" class="btn btn-primary btn-full">
+          <span>Open Dashboard</span>
+          <span class="btn-arrow">→</span>
+        </button>
+        <button class="btn btn-ghost btn-full" data-home>← Back to Candidate Portal</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SCREEN 3: ADMIN DASHBOARD
+  ══════════════════════════════════════════ -->
+  <section id="dashboard" class="screen hidden">
+
+    <!-- Dashboard header -->
+    <div class="dash-header">
+      <div>
+        <div class="eyebrow">ASSESSMENT CONTROL ROOM</div>
+        <h1>Live <em>Overview</em></h1>
+        <p>Candidate activity refreshes automatically every 3 seconds.</p>
+      </div>
+      <div class="dash-header-actions">
+        <div class="live-indicator"><span class="pulse-dot"></span> LIVE</div>
+        <button id="admin-logout" class="btn btn-ghost">Sign Out</button>
+      </div>
+    </div>
+
+    <!-- Control row: toggle + settings -->
+    <div class="control-row">
+      <div class="control-panel glass-card">
+        <div class="control-panel-info">
+          <div class="eyebrow">CANDIDATE ACCESS</div>
+          <b id="access-title">Test closed</b>
+          <small id="access-subtitle">Candidates cannot start while closed</small>
+        </div>
+        <button id="toggle-test" class="toggle-switch off" aria-label="Toggle test access">
+          <span class="toggle-knob"></span>
+        </button>
+      </div>
+
+      <div class="settings-panel glass-card">
+        <div class="settings-grid">
+          <label class="settings-label">
+            <span class="eyebrow">QUESTION SET</span>
+            <select id="set-setting" class="settings-select">
+              <option value="A">Set A</option>
+              <option value="B">Set B</option>
+            </select>
+          </label>
+          <label class="settings-label">
+            <span class="eyebrow">DURATION</span>
+            <select id="duration-setting" class="settings-select">
+              <option value="60">1 hour</option>
+              <option value="120">2 hours</option>
+              <option value="180">3 hours</option>
+              <option value="240">4 hours</option>
+              <option value="300">5 hours</option>
+              <option value="360">6 hours</option>
+            </select>
+          </label>
+          <label class="settings-label">
+            <span class="eyebrow">QUESTIONS</span>
+            <select id="count-setting" class="settings-select">
+              <option value="10">10 questions</option>
+              <option value="20">20 questions</option>
+              <option value="30">30 questions</option>
+              <option value="40">40 questions</option>
+              <option value="50">50 questions</option>
+            </select>
+          </label>
+        </div>
+        <span id="settings-saved" class="saved-indicator"></span>
+      </div>
+    </div>
+
+    <!-- Metrics row -->
+    <div class="metric-grid" id="metrics"></div>
+
+    <!-- Main grid: candidates + notes -->
+    <div class="dashboard-grid">
+      <section class="glass-card panel-section">
+        <div class="section-header">
+          <div>
+            <div class="eyebrow">CANDIDATE MONITORING</div>
+            <h2>Live Candidates</h2>
+          </div>
+          <span class="live-badge"><span class="pulse-dot"></span>LIVE</span>
+        </div>
+        <div id="candidate-table"></div>
+      </section>
+
+      <aside class="glass-card panel-section notes-aside">
+        <div class="eyebrow">LEGEND &amp; NOTES</div>
+        <h2>Status Guide</h2>
+        <div class="legend-grid">
+          <div class="legend-item online"><span class="leg-dot"></span><div><b>Online</b><small>Active in last 15 sec</small></div></div>
+          <div class="legend-item idle"><span class="leg-dot"></span><div><b>Idle</b><small>15–60 sec inactive</small></div></div>
+          <div class="legend-item offline"><span class="leg-dot"></span><div><b>Offline</b><small>Over 60 sec inactive</small></div></div>
+          <div class="legend-item submitted"><span class="leg-dot"></span><div><b>Submitted</b><small>Test submitted</small></div></div>
+        </div>
+        <div class="info-note">
+          <strong>Grading note:</strong> Run Sample only checks the visible public example. Submit Answer runs private admin-configured test cases. Configure test cases below before relying on automatic marks.
+        </div>
+      </aside>
+    </div>
+
+    <!-- Question analytics -->
+    <section class="glass-card panel-section question-analytics">
+      <div class="section-header">
+        <div>
+          <div class="eyebrow">QUESTION INSIGHTS</div>
+          <h2>Question Progress</h2>
+        </div>
+        <span id="question-count-badge" class="live-badge">0 QUESTIONS</span>
+      </div>
+      <p class="muted-text">Click a question card to see submissions, test-case results, and correctness breakdown.</p>
+      <div class="question-filters">
+        <button id="question-filter-attempted" class="filter-pill active" data-qfilter="attempted">Attempted</button>
+        <button id="question-filter-all" class="filter-pill" data-qfilter="all">All assigned</button>
+      </div>
+      <div id="question-cards" class="question-cards-grid"></div>
+    </section>
+
+    <!-- Question analytics modal -->
+    <div id="question-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-label="Question results">
+      <div class="question-modal-shade">
+        <article id="question-modal-content" class="modal-card"></article>
+      </div>
+    </div>
+
+    <!-- Test case manager -->
+    <section class="glass-card panel-section case-manager">
+      <div class="section-header">
+        <div>
+          <div class="eyebrow">QUESTION BANK</div>
+          <h2>Private Test Cases</h2>
+        </div>
+      </div>
+      <p class="muted-text">Configure up to 20 input/output pairs per question. Cases are hidden from candidates and used for automatic scoring on submission.</p>
+      <label class="form-label" for="case-question">Select Question</label>
+      <select id="case-question" class="settings-select case-select"></select>
+      <div id="case-rows" class="case-rows-container"></div>
+      <div class="case-actions">
+        <button id="add-case" class="btn btn-ghost">+ Add Test Case</button>
+        <button id="save-cases" class="btn btn-primary">Save Cases</button>
+        <span id="case-save-state" class="saved-indicator"></span>
+      </div>
+    </section>
+
+    <!-- Candidate code review area -->
+    <div id="review-area"></div>
+
+  </section>
+
+  <!-- ══════════════════════════════════════════
+       SCREEN 4: EXAM
+  ══════════════════════════════════════════ -->
+  <section id="exam" class="screen hidden">
+
+    <!-- Exam top bar -->
+    <div class="exam-header">
+      <div class="exam-header-left">
+        <span class="eyebrow" id="exam-set">SET A · 50 QUESTIONS</span>
+        <h1 id="candidate-greeting">Assessment</h1>
+      </div>
+      <div class="exam-clock">
+        <span class="clock-label">TIME REMAINING</span>
+        <div id="timer" class="clock-display">--:--:--</div>
+      </div>
+    </div>
+
+    <!-- Progress bar -->
+    <div class="exam-progress-bar">
+      <div id="exam-progress-fill" class="exam-progress-fill" style="width:0%"></div>
+    </div>
+
+    <div class="exam-layout">
+
+      <!-- Left: question navigation rail -->
+      <aside class="question-rail glass-card">
+        <div class="eyebrow rail-label">QUESTIONS</div>
+        <div id="question-nav" class="question-nav-grid"></div>
+        <div class="rail-legend">
+          <span class="legend-sq answered"></span> Code saved
+        </div>
+      </aside>
+
+      <!-- Right: question panel + editor -->
+      <article class="question-main glass-card">
+
+        <!-- Question meta -->
+        <div class="question-meta-bar">
+          <span id="question-position" class="position-badge">QUESTION 1 / 50</span>
+          <div id="question-tags" class="tags-row"></div>
+        </div>
+
+        <h2 id="question-title" class="question-title">Loading question…</h2>
+        <div id="question-statement" class="question-statement"></div>
+
+        <!-- Public sample -->
+        <div class="sample-block">
+          <div class="sample-header">
+            <span>📋 PUBLIC SAMPLE</span>
+            <span class="sample-note">Example only — not a grading case</span>
+          </div>
+          <pre id="question-sample" class="sample-pre">No sample data supplied.</pre>
+          <p class="sample-hint">Run Sample checks this visible example. Submit Answer runs the admin-configured private test suite.</p>
+        </div>
+
+        <!-- Code editor -->
+        <div class="editor-section">
+          <div class="editor-toolbar">
+            <div class="editor-lang">
+              <label class="eyebrow" for="language">LANGUAGE</label>
+              <select id="language" class="lang-select"></select>
+            </div>
+            <span id="save-state" class="save-indicator">READY</span>
+          </div>
+
+          <div class="editor-stage">
+            <pre id="highlight" aria-hidden="true"><code id="highlight-code"></code></pre>
+            <textarea id="code" spellcheck="false" autocapitalize="off" autocomplete="off"
+              autocorrect="off" placeholder="Write your solution here…"
+              aria-label="Code editor"></textarea>
+          </div>
+
+          <div class="editor-footer">
+            <span class="editor-note">Runs on Judge0 CE · Code is sent server-side</span>
+            <span id="run-state" class="run-state"></span>
+          </div>
+
+          <div id="output-box" class="output-box hidden">
+            <div class="output-header" id="output-title">RUN RESULT</div>
+            <pre id="output-text" class="output-pre"></pre>
+          </div>
+        </div>
+
+        <!-- Exam controls -->
+        <div class="exam-controls">
+          <button id="run-code" class="btn btn-secondary">▶ Run Sample</button>
+          <button id="submit-code" class="btn btn-primary">✓ Submit Answer</button>
+          <div class="controls-spacer"></div>
+          <button id="prev-question" class="btn btn-ghost">← Prev</button>
+          <button id="next-question" class="btn btn-ghost">Next →</button>
+          <button id="finish-exam" class="btn btn-danger">🏁 Finish Test</button>
+        </div>
+
+      </article>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <span class="footer-brand">⬡ CODEARENA</span>
+  <span>Private assessment workspace</span>
+  <span>DSA Practice Lab</span>
+</footer>
+
+<script src="platform.js"></script>
+</body>
+</html>

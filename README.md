@@ -1,68 +1,149 @@
-# DSA Coding Assessment Platform
+# ⬡ CodeArena — DSA Assessment Platform
 
-A small-group coding test app for two candidates, created from the supplied 100-question HTML. It has a password-protected administrator dashboard, candidate portal, Set A/B exams, timed attempts, autosaving source code, C/C++/Java/Python/JavaScript runners, submissions, and live candidate monitoring.
+A real-time online coding-test platform for administrators and candidates. Candidates solve DSA problems by writing and running code in C, C++, Java, Python, or JavaScript. The administrator monitors both candidates live, reviews submitted code, and awards marks.
 
-## Start on Windows
+---
 
-1. Open PowerShell and change to this folder (quotes matter because `New project` contains a space):
+## ✨ Features
 
-   ```powershell
-   cd "C:\path\to\project"
-   ```
+| Feature | Description |
+|---------|-------------|
+| 🎨 Animated UI | Dark cosmic theme with particle canvas, glassmorphism cards, animated aurora gradient |
+| 👤 Candidate portal | Login page, timer, question navigation, syntax-highlighted code editor |
+| 🔐 Admin dashboard | Password-protected control room with live candidate monitoring |
+| ⚡ Code execution | Server-side via Judge0 CE (safe, sandboxed, never runs on your server) |
+| 📊 Analytics | Question-level stats, per-candidate test case pass/fail, score breakdown |
+| 💾 Persistent storage | Upstash Redis for production; local file-based for development |
+| 🔄 Autosave | Code saved every 650 ms of idle time, preserved across refreshes |
+| 🌐 Dual deployment | Works locally and on Vercel |
 
-2. Create your private local settings file and set an administrator password. The `.env` file is ignored by Git:
+---
 
-   ```powershell
-   Copy-Item .env.example .env
-   notepad .env
-   ```
+## 🚀 Quick Start (Local)
 
-3. Start the app with the Windows npm launcher. This avoids PowerShell's `npm.ps1` script-policy error. Keep this terminal open; the browser will say **Server unavailable** whenever the server is stopped:
+### Prerequisites
+- Node.js 18+
 
-   ```powershell
-   npm.cmd start
-   ```
+### Steps
 
-4. Open the **This computer** address printed in PowerShell (normally **http://localhost:4173**). If that port is busy, the server tries the next available port. The admin dashboard is at the same address plus **/control-room** and uses the `ADMIN_PASSWORD` from your private `.env` file.
+```bash
+# 1. Clone the repository
+git clone https://github.com/gunaseelanvinoth/practise.git
+cd practise
 
-5. In the admin dashboard set the duration and question count, then switch **Candidate Access** on. Candidates on the same Wi-Fi can open the **Same Wi-Fi network** address printed in PowerShell. If Windows Firewall asks, allow Node.js on private networks. Keep the PowerShell window and computer running for the duration of the test.
+# 2. Create your local config
+cp .env.example .env
+# Edit .env — set ADMIN_PASSWORD=something-secret
 
-6. When everyone is done, switch Candidate Access off. Review candidate code and marks from the admin dashboard. Marks are out of one per question; you can award or remove a mark for each submitted answer.
+# 3. Start the server (Windows)
+npm.cmd start
 
-The local `.env` file is private, ignored by Git, and outside the public web directory. Never share it with candidates. The `/control-room` path is not a substitute for authentication; the password is still required. `JUDGE0_URL` and `JUDGE0_KEY` can point to an authorized Judge0 instance; defaults are the public Judge0 CE endpoint and no API key. This local start command is for running on your computer or its Wi-Fi network; it does not publish the site to the internet.
+# 4. Open in browser
+# Candidate: http://localhost:4173
+# Admin:     http://localhost:4173/control-room
+```
 
-## Candidate experience
+The admin password is printed to the console on first start if you don't set it in `.env`.
 
-The administrator selects Set A or Set B, test duration, and question count before opening access. Candidates enter only their name; the assigned set is fixed by the server and candidates cannot choose or switch sets. The compiler offers only the newest available Judge0 entry for each of C, C++, Java, JavaScript, and Python. Cached lists are filtered again in the browser, appear immediately, then refresh in the background; the catalogue is cached for six hours in the browser session and server process. The editor keeps separate drafts per language, highlights common syntax, and uses an animated indigo/violet workspace theme. Candidates can run the visible sample or submit an answer. A sample run checks only that public example and does not award a mark. Submit answer runs every admin-configured private test case for that question; candidates see only the number passed and percentage, while the administrator sees per-case results. Each question receives a proportional mark (passed cases / configured cases). The admin dashboard shows attempted questions by default, offers an All assigned view, and opens a circular question report with submitted, completed, not completed, fully correct, failed case, and judge error counts. The dashboard lets you configure up to twenty input/output cases per question. With no cases configured, code is saved for manual review; it is never auto-passed. Code is autosaved to this server. The timer starts on the server and the attempt auto-submits at expiry. Candidate presence is shown as Online (<15 seconds), Idle (15–60 seconds), or Offline (>60 seconds). The admin dashboard refreshes every three seconds.
+---
 
-## Important limits of this question bank and run setup
+## 🌐 Vercel Production Deployment
 
-The imported HTML is a tutorial bank with worked examples. It contains 100 titles/statements and Java/Python reference answers, but it does **not** provide hidden tests or a standard input/output contract for every task. Four questions have no explicit sample input and 18 have no explicit sample output. Accordingly:
+### Step 1 — Set up Upstash Redis
 
-- **Run sample** executes the submitted code through Judge0 and compares output with the supplied sample only when the sample is complete. Sample matching is not proof of full correctness.
-- The original tutorial bank does not include validated hidden input/output cases or a consistent stdin contract. Add suitable cases in the admin dashboard for every question you want automatically graded. A case must reflect that question's stated input/output format.
-- No hidden test suite is invented. For missing/incomplete samples, code is still saved and can be run, but an administrator must review it and assign the mark.
-- C, C++, Java, Python and JavaScript execution is performed by the configured Judge0 service. Candidate source code and sample input are sent to that service. The public Judge0 CE service may impose availability or usage limits; for a high-stakes or public exam, configure a private Judge0 deployment and author/validate hidden tests first.
+1. Go to [console.upstash.com](https://console.upstash.com)
+2. Create a **new Redis database** (free tier works fine)
+3. Copy the **REST URL** and **REST Token**
 
-## Deploy on Vercel
+### Step 2 — Deploy to Vercel
 
-This project has a static frontend in `public/` and a serverless API in the root `api/` directory. In Vercel, import the repository with **Root Directory set to the repository root** (not `public/`), Framework Preset **Other**, and Output Directory `public`. The root URL and `/control-room` both open the platform. Vercel deploys the API separately from the static files.
+1. Push your code to GitHub
+2. Go to [vercel.com](https://vercel.com) → **New Project** → import the repository
+3. Framework: **Other** (no framework)
+4. Output directory: `public`
+5. Click **Deploy**
 
-For online tests to work across devices, connect an Upstash Redis database to the Vercel project and add these production environment variables in **Project Settings → Environment Variables**:
+### Step 3 — Set Environment Variables
 
-- `UPSTASH_REDIS_REST_URL` — Upstash Redis REST endpoint
-- `UPSTASH_REDIS_REST_TOKEN` — Upstash Redis REST token
-- `ADMIN_PASSWORD` — private administrator password
-- `JUDGE0_URL` — optional; defaults to `https://ce.judge0.com`
-- `JUDGE0_KEY` — optional Judge0 token, if required by the selected Judge0 service
+In Vercel project → **Settings** → **Environment Variables**, add:
 
-Redeploy after saving environment variables. Without both Upstash variables, static pages may deploy but login, test access, submissions, and the admin dashboard cannot use shared online storage. The page now reports this missing setup instead of a generic “server unavailable” state. The Vercel settings and an actual public deployment still require access to the owner's Vercel account. Candidate source code and test input are sent to Judge0. Local attempts are stored in `data\state.json`; Vercel attempts persist in Upstash Redis.
+| Variable | Value |
+|----------|-------|
+| `ADMIN_PASSWORD` | A strong secret password |
+| `UPSTASH_REDIS_REST_URL` | From Upstash dashboard |
+| `UPSTASH_REDIS_REST_TOKEN` | From Upstash dashboard |
+| `JUDGE0_URL` | `https://ce.judge0.com` (or your own) |
 
-## Question source utilities
+### Step 4 — Redeploy
 
-- `npm.cmd run import:questions` re-parses the default source at `C:\path\to\DSA Practice Lab.html`; provide another HTML path as an argument if needed.
-- `npm.cmd run generate:sets` rebuilds reproducible, non-overlapping 50-question sets. The default seed is `DSA-PLAB-2026`; set `TEST_SEED` to change it.
+After adding env vars, go to **Deployments** → **Redeploy** (check "Redeploy with existing build cache").
 
-Import validation from the supplied HTML: **100 questions; 100 unique IDs; 0 missing titles, statements, Java references, or Python references; 4 without explicit sample input; 18 without explicit sample output.**
+### URLs (production)
+- Candidate: `https://your-project.vercel.app`
+- Admin: `https://your-project.vercel.app/control-room`
 
-Run the local grading and language-selection checks with `npm.cmd test`.
+---
+
+## 🛠️ Admin Workflow
+
+1. Open `/control-room` and sign in with admin password
+2. **Configure**: Set question set (A or B), duration, question count
+3. **Open test**: Toggle "Candidate Access" to open
+4. **Monitor**: Watch the live candidate table — Online/Idle/Offline status updates every 3 seconds
+5. **Analyse**: Click any question card to see per-candidate test case results
+6. **Review code**: Click "Review" on any candidate to read their submitted code
+7. **Award marks**: Use the manual grader (0.00–1.00) for ungraded questions
+8. **Close test**: Toggle access off when done
+
+---
+
+## 📋 Project Structure
+
+```
+├── public/
+│   ├── index.html        Redirect to platform.html
+│   ├── platform.html     Main SPA (candidate + admin views)
+│   ├── platform.css      All styles (animated dark theme)
+│   └── platform.js       All frontend logic
+├── api/
+│   ├── handler.cjs       Vercel API handler (Upstash Redis)
+│   └── [...path].mjs     Vercel serverless entry point
+├── lib/
+│   └── evaluation.js     Grading utilities
+├── local-server.cjs      Local Node.js server
+├── questions.json        100 DSA questions
+├── sets.json             Set A and Set B question ID lists
+├── vercel.json           Vercel configuration
+├── .env.example          Environment variable template
+└── package.json
+```
+
+---
+
+## 🔒 Security
+
+- Admin password checked server-side on every authenticated request
+- Candidate tokens stored in `sessionStorage` only (not `localStorage`)
+- Private test cases never sent to candidates
+- Code execution sandboxed on Judge0 — never runs on your server
+- All secrets in environment variables, never in source code
+- `.env`, `data/`, and `*.local` are git-ignored
+
+---
+
+## 🧪 Running Tests
+
+```bash
+npm.cmd test
+```
+
+This runs the 4 built-in grading unit tests in `test/evaluation.test.js`.
+
+---
+
+## ⚠️ Notes
+
+- **No private test cases by default** — automatic scoring requires you to configure test cases per question in the admin dashboard. Without them, submissions are saved as "ungraded" for manual review.
+- **Judge0 public instance** may have rate limits. For heavy use, provision your own Judge0 instance.
+- **Local data** is stored in `data/state.json` (created automatically, git-ignored).
+- **Production data** requires Upstash Redis. The platform shows a clear error if the database is not configured.
