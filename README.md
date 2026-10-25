@@ -147,3 +147,13 @@ This runs the 4 built-in grading unit tests in `test/evaluation.test.js`.
 - **Judge0 public instance** may have rate limits. For heavy use, provision your own Judge0 instance.
 - **Local data** is stored in `data/state.json` (created automatically, git-ignored).
 - **Production data** requires Upstash Redis. The platform shows a clear error if the database is not configured.
+
+## Code submission CSV export
+
+The admin dashboard can export selected submitted answers, submissions for one candidate, or all submissions. The admin-only POST /api/admin/export-csv endpoint returns exactly these columns: Question ID, Question, Language, Source Code, Test Cases Passed, Test Cases Failed, Total Test Cases, and Final Status. CSV escaping preserves commas, quotes, and multiline code. Drafts and Run Sample executions are excluded.
+
+Each Submit Answer run is saved in the existing local JSON state or the additive dsa:submissions Upstash list. Historical submissions remain selectable after the answer changes. Candidate APIs do not return the hidden test suite or other candidates' submissions.
+
+## Test suite setup boundary
+
+The project includes real Judge0 sandbox execution and an admin-only per-question private test case manager. The imported tutorial question bank does not define a consistent stdin/output contract or validated hidden suite for every problem. Configure and verify question-specific sample and hidden inputs in the admin dashboard before trusting automatic grading. This update does not invent expected outputs or claim two public plus three hidden cases for all 100 questions. A production rollout still needs Upstash and Judge0 environment variables configured; no live Judge0 run or ten-question end-to-end sweep was performed here.

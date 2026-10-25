@@ -197,6 +197,13 @@
 
     <!-- Metrics row -->
     <div class="metric-grid" id="metrics"></div>
+    <section class="glass-card panel-section submission-export">
+      <div class="section-header"><div><div class="eyebrow">CODE SUBMISSIONS</div><h2>Export Submitted Code</h2></div></div>
+      <p class="muted-text">Export only the submissions you select, one candidate's submissions, or all submissions.</p>
+      <label class="form-label" for="export-user">Candidate</label><select id="export-user" class="settings-select"><option value="">Select a candidate</option></select>
+      <div class="case-actions"><button id="export-selected" class="btn btn-secondary">Export Selected</button><button id="export-user-btn" class="btn btn-secondary">Export Candidate</button><button id="export-all" class="btn btn-primary">Export All</button><span id="export-state" class="saved-indicator"></span></div>
+      <div id="submission-export-list"></div>
+    </section>
 
     <!-- Main grid: candidates + notes -->
     <div class="dashboard-grid">
@@ -339,10 +346,11 @@
               <label class="eyebrow" for="language">LANGUAGE</label>
               <select id="language" class="lang-select"></select>
             </div>
-            <span id="save-state" class="save-indicator">READY</span>
+            <div class="editor-actions"><button id="reset-code" type="button" class="btn btn-ghost">Reset Template</button><button id="clear-code" type="button" class="btn btn-ghost">Clear</button><span id="save-state" class="save-indicator">READY</span></div>
           </div>
 
           <div class="editor-stage">
+            <div id="editor-lines" aria-hidden="true">1</div>
             <pre id="highlight" aria-hidden="true"><code id="highlight-code"></code></pre>
             <textarea id="code" spellcheck="false" autocapitalize="off" autocomplete="off"
               autocorrect="off" placeholder="Write your solution here…"

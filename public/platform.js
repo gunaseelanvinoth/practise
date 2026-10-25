@@ -206,7 +206,7 @@ let _hlFrame = null;
 function renderHighlight() {
   if (_hlFrame) cancelAnimationFrame(_hlFrame);
   _hlFrame = requestAnimationFrame(() => {
-    const code = $('#code'), layer = $('#highlight-code');
+    const code = $('#code'), layer = $('#highlight-code'), gutter = $('#editor-lines');
     if (!code || !layer) return;
     const text = code.value;
     const pattern = /(\/\*[\s\S]*?\*\/|\/\/[^\n]*|#[^\n]*|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|`(?:\\.|[^`\\])*`|\b\d+(?:\.\d+)?\b|\b[A-Za-z_$][\w$]*(?=\s*\()|\b[A-Za-z_$][\w$]*\b)/gm;
@@ -224,8 +224,10 @@ function renderHighlight() {
       last = pattern.lastIndex;
     }
     layer.innerHTML = result + esc(text.slice(last)) + '\n';
+    if (gutter) gutter.textContent = Array.from({length:Math.max(1,text.split('\n').length)},(_,i)=>i+1).join('\n');
     const pre = $('#highlight');
     pre.scrollTop = code.scrollTop; pre.scrollLeft = code.scrollLeft;
+    if (gutter) gutter.scrollTop = code.scrollTop;
   });
 }
 
@@ -332,6 +334,8 @@ async function saveCode() {
 }
 
 /* ─── Editor events ──────────────────────────────────────── */
+$('#reset-code').onclick=()=>{if(!attempt)return;$('#code').value=template(selectedLanguage());$('#code').dispatchEvent(new Event('input'));};
+$('#clear-code').onclick=()=>{if(!attempt)return;$('#code').value='';$('#code').dispatchEvent(new Event('input'));};
 $('#code').addEventListener('input', () => {
   const q=currentQuestion(), lang=selectedLanguage();
   if (q&&lang) { drafts[q.id]||(drafts[q.id]={}); drafts[q.id][String(lang.id)]=$('#code').value; persistDrafts(); }
@@ -348,6 +352,13 @@ $('#code').addEventListener('keydown', e => {
     const a=e.target, s=a.selectionStart, end=a.selectionEnd;
     a.value = a.value.slice(0,s)+'    '+a.value.slice(end);
     a.selectionStart = a.selectionEnd = s+4;
+    a.dispatchEvent(new Event('input'));
+  } else if (e.key==='Enter') {
+    e.preventDefault();
+    const a=e.target, start=a.selectionStart, end=a.selectionEnd;
+    const line=a.value.slice(0,start).split('\n').at(-1);
+    const indent=(line.match(/^\s*/)||[''])[0]+(/[{:]\s*$/.test(line)?'    ':'');
+    a.setRangeText('\n'+indent,start,end,'end');
     a.dispatchEvent(new Event('input'));
   }
 });
@@ -466,6 +477,7 @@ setInterval(refreshDashboard,3000);
 function renderDashboard(d) {
   show('dashboard');
   renderCaseManager(d);
+  renderSubmissionExports(d);
   renderQuestionAnalytics(d);
   const s=d.settings, toggle=$('#toggle-test');
   toggle.classList.toggle('on',s.enabled); toggle.classList.toggle('off',!s.enabled);
@@ -779,6 +791,26 @@ function renderQuestionModal(qid, qs) {
   $('#close-question-modal-bottom').onclick=closeQuestionAnalytics;
 }
 
+/* ─── Selectable, admin-only CSV export ─────────────────── */
+let exportRows=[],selectedExportIds=new Set();
+function renderSubmissionExports(d){
+  $$('.export-check').forEach(box=>box.checked?selectedExportIds.add(box.value):selectedExportIds.delete(box.value));
+  const history=d.submissions||[],seen=new Set(history.map(x=>`${x.attemptId}:${x.questionId}`));
+  exportRows=[...history.map(x=>({id:x.id,user:x.user,qid:x.questionId,code:x.code,language:x.language,ev:x.testEvaluation})),
+    ...(d.attempts||[]).flatMap(a=>Object.entries(a.answers||{}).filter(([qid,x])=>x?.submittedAt&&!seen.has(`${a.id}:${qid}`)).map(([qid,x])=>({id:`${a.id}:${qid}:${x.submittedAt}`,user:a.name,qid,code:x.code,language:x.languageName,ev:x.testEvaluation})))];
+  const users=[...new Set(exportRows.map(x=>x.user))].sort((a,b)=>a.localeCompare(b)),select=$('#export-user'),previous=select.value;
+  select.innerHTML='<option value="">Select a candidate</option>'+users.map(name=>`<option value="${esc(name)}">${esc(name)}</option>`).join('');if(users.includes(previous))select.value=previous;
+  $('#submission-export-list').innerHTML=exportRows.length?`<div class="table-scroll"><table class="candidate-table"><thead><tr><th>Select</th><th>Candidate</th><th>Question</th><th>Language</th><th>Cases Passed</th></tr></thead><tbody>${exportRows.map(x=>`<tr><td><input type="checkbox" class="export-check" value="${esc(x.id)}" ${selectedExportIds.has(x.id)?'checked':''} aria-label="Select ${esc(x.user)} Q${esc(x.qid)}"></td><td>${esc(x.user)}</td><td>Q${esc(x.qid)} · ${esc(d.questions?.find(q=>String(q.id)===String(x.qid))?.title||`Question ${x.qid}`)}</td><td>${esc(x.language||'')}</td><td>${x.ev?.total?`${Number(x.ev.passed)||0}/${Number(x.ev.total)||0}`:'—'}</td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">No submitted code is available to export.</div>';
+}
+async function downloadSubmissionCsv(mode,extra={}){
+  const state=$('#export-state'),buttons=[$('#export-selected'),$('#export-user-btn'),$('#export-all')];buttons.forEach(x=>x.disabled=true);state.textContent='Exporting…';
+  try{const response=await fetch('/api/admin/export-csv',{method:'POST',headers:{'Content-Type':'application/json',Authorization:`Bearer ${sessionStorage.getItem('admin-token')}`},body:JSON.stringify({mode,...extra})});if(!response.ok){let error={};try{error=await response.json()}catch{}throw Error(error.error||`Export failed (${response.status})`)}const url=URL.createObjectURL(await response.blob()),a=document.createElement('a');a.href=url;a.download='dsa-code-submissions.csv';document.body.append(a);a.click();a.remove();URL.revokeObjectURL(url);state.textContent='CSV downloaded';}
+  catch(e){state.textContent=e.message;}finally{buttons.forEach(x=>x.disabled=false);}
+}
+$('#submission-export-list').onchange=e=>{const box=e.target.closest('.export-check');if(!box)return;box.checked?selectedExportIds.add(box.value):selectedExportIds.delete(box.value);};
+$('#export-selected').onclick=()=>{const ids=$$('.export-check:checked').map(x=>x.value);if(!ids.length){$('#export-state').textContent='Select at least one submission';return;}downloadSubmissionCsv('selected',{ids});};
+$('#export-user-btn').onclick=()=>{const user=$('#export-user').value;if(!user){$('#export-state').textContent='Select a candidate first';return;}downloadSubmissionCsv('user',{user});};
+$('#export-all').onclick=()=>downloadSubmissionCsv('all');
 /* ─── Test case manager ──────────────────────────────────── */
 function renderCaseRows() {
   const id=$('#case-question').value, cases=dashboardCases[id]||[];
