@@ -716,7 +716,9 @@ $('#submission-export-user-button').onclick=()=>{
   if(!userId){showToast('Select a user to export.','warning');return;}
   exportSubmissions('/api/admin/submissions/export-user',{userId},$('#submission-export-user-button'));
 };
-$('#submission-export-all').onclick=()=>exportSubmissions('/api/admin/submissions/export-all',{},$('#submission-export-all'));
+const exportAllSubmissions=button=>exportSubmissions('/api/admin/submissions/export-all',{},button);
+$('#submission-export-all').onclick=()=>exportAllSubmissions($('#submission-export-all'));
+$('#dashboard-export-all').onclick=()=>exportAllSubmissions($('#dashboard-export-all'));
 
 /* ─── Analytics helpers ──────────────────────────────────── */
 function measuredCases(ev) {
