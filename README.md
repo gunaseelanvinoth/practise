@@ -10,19 +10,26 @@ A small-group coding test app for two candidates, created from the supplied 100-
    cd "C:\path\to\project"
    ```
 
-2. Start the app with the Windows npm launcher. This avoids PowerShell's `npm.ps1` script-policy error. Keep this terminal open; the browser will say **Server unavailable** whenever the server is stopped:
+2. Create your private local settings file and set an administrator password. The `.env` file is ignored by Git:
+
+   ```powershell
+   Copy-Item .env.example .env
+   notepad .env
+   ```
+
+3. Start the app with the Windows npm launcher. This avoids PowerShell's `npm.ps1` script-policy error. Keep this terminal open; the browser will say **Server unavailable** whenever the server is stopped:
 
    ```powershell
    npm.cmd start
    ```
 
-3. Open the **This computer** address printed in PowerShell (normally **http://localhost:4173**). If that port is busy, the server tries the next available port. The admin dashboard is hidden from the candidate page at the same address plus **/control-room**. It is protected by the password you requested.
+4. Open the **This computer** address printed in PowerShell (normally **http://localhost:4173**). If that port is busy, the server tries the next available port. The admin dashboard is at the same address plus **/control-room** and uses the `ADMIN_PASSWORD` from your private `.env` file.
 
-4. In the admin dashboard set the duration and question count, then switch **Candidate Access** on. Candidates on the same Wi-Fi can open the **Same Wi-Fi network** address printed in PowerShell. If Windows Firewall asks, allow Node.js on private networks. Keep the PowerShell window and computer running for the duration of the test.
+5. In the admin dashboard set the duration and question count, then switch **Candidate Access** on. Candidates on the same Wi-Fi can open the **Same Wi-Fi network** address printed in PowerShell. If Windows Firewall asks, allow Node.js on private networks. Keep the PowerShell window and computer running for the duration of the test.
 
-5. When everyone is done, switch Candidate Access off. Review candidate code and marks from the admin dashboard. Marks are out of one per question; you can award or remove a mark for each submitted answer.
+6. When everyone is done, switch Candidate Access off. Review candidate code and marks from the admin dashboard. Marks are out of one per question; you can award or remove a mark for each submitted answer.
 
-The local `.env` file is set to the password you requested. It is ignored by Git and is outside the public web directory. Never share it with candidates. The hidden `/control-room` URL is not a substitute for authentication; the password is still required. `JUDGE0_URL` and `JUDGE0_KEY` can point to an authorized Judge0 instance; defaults are the public Judge0 CE endpoint and no API key.
+The local `.env` file is private, ignored by Git, and outside the public web directory. Never share it with candidates. The `/control-room` path is not a substitute for authentication; the password is still required. `JUDGE0_URL` and `JUDGE0_KEY` can point to an authorized Judge0 instance; defaults are the public Judge0 CE endpoint and no API key. This local start command is for running on your computer or its Wi-Fi network; it does not publish the site to the internet.
 
 ## Candidate experience
 
