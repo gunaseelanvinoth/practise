@@ -393,6 +393,13 @@ async function run(submit) {
       $('#run-state').textContent=msg; showToast(msg, r.passed?'success':r.sampleCompared?'error':'info', 3000);
     }
     renderNav(); updateProgress();
+    if (submit) {
+      if (index < questions.length - 1) {
+        setTimeout(() => navigate(index + 1), 1200);
+      } else {
+        showToast('All questions submitted! You can review or click Finish Test.', 'info', 4000);
+      }
+    }
   } catch(e) {
     $('#run-state').textContent=e.message;
     $('#output-box').classList.remove('hidden');
