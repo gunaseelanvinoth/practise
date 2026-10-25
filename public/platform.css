@@ -1993,3 +1993,44 @@ html[data-route="admin"] #exam { display: none !important; }
 html[data-route="candidate"] #admin-login { display: none !important; }
 html[data-route="candidate"] #dashboard { display: none !important; }
 html[data-route="candidate"] #exam { display: none !important; }
+
+
+/* ─── Real editor, visible cases, and submission records ─── */
+.monaco-editor { width:100%; height:390px; min-height:300px; border:1px solid var(--border2); border-radius:10px; overflow:hidden; }
+.editor-stage:has(.monaco-editor:not(.hidden)) #highlight,
+.editor-stage:has(.monaco-editor:not(.hidden)) #code { display:none !important; }
+.editor-stage:has(.monaco-editor:not(.hidden)) { display:block; padding:0; }
+.editor-actions { display:flex; justify-content:flex-end; gap:8px; margin-top:9px; }
+.question-format { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin:16px 0; }
+.question-format:empty { display:none; }
+.format-card { padding:12px 14px; background:rgba(10,13,30,.68); border:1px solid var(--border); border-radius:10px; min-width:0; }
+.format-card b { display:block; margin-bottom:7px; color:var(--cyan); font:600 10px var(--mono); letter-spacing:.08em; text-transform:uppercase; }
+.format-card pre { margin:0; white-space:pre-wrap; overflow-wrap:anywhere; color:var(--text2); font:12px/1.6 var(--mono); }
+.question-samples { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:10px; }
+.sample-case-card { padding:12px; background:rgba(10,13,30,.74); border:1px solid var(--border); border-radius:9px; }
+.sample-case-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; color:var(--cyan); font:600 10px var(--mono); text-transform:uppercase; }
+.sample-case-card small { display:block; margin:8px 0 5px; color:var(--muted); font:10px var(--mono); text-transform:uppercase; }
+.sample-case-card pre { margin:0; max-height:150px; overflow:auto; white-space:pre-wrap; overflow-wrap:anywhere; color:var(--text2); font:12px/1.5 var(--mono); }
+.case-status-pill { padding:3px 7px; border-radius:99px; font:600 10px var(--mono); }
+.case-status-pill.pass { color:var(--green); background:rgba(62,234,173,.1); }
+.case-status-pill.fail { color:var(--red); background:rgba(255,107,138,.1); }
+.submission-history-block { margin-top:18px; padding:15px; border:1px solid var(--border); border-radius:12px; background:rgba(10,13,30,.48); }
+.submission-history { overflow:auto; }
+.submission-history table { width:100%; border-collapse:collapse; min-width:580px; }
+.submission-history th,.submission-history td { padding:9px 10px; border-bottom:1px solid var(--border); text-align:left; font-size:12px; }
+.submission-history th { color:var(--muted); font:600 10px var(--mono); text-transform:uppercase; }
+.submission-filters,.submission-toolbar { display:flex; flex-wrap:wrap; gap:9px; align-items:end; margin:12px 0; }
+.submission-filters label,.submission-toolbar label { display:grid; gap:5px; color:var(--muted); font:600 10px var(--mono); text-transform:uppercase; }
+.submission-filters label:first-child { flex:1 1 200px; }
+.submission-filters .form-input,.submission-filters .settings-select,.submission-toolbar .settings-select { min-width:145px; }
+.submission-toolbar { padding:11px 0; border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+.submission-row-details { max-width:700px; white-space:normal; }
+.submission-row-details summary { cursor:pointer; color:var(--cyan); }
+.submission-row-details pre { max-height:250px; overflow:auto; padding:10px; border:1px solid var(--border); border-radius:8px; white-space:pre-wrap; overflow-wrap:anywhere; color:var(--text2); background:rgba(4,6,16,.85); font:11px/1.5 var(--mono); }
+.submission-select { accent-color:var(--violet); width:16px; height:16px; }
+@media (max-width:760px) {
+  .question-format { grid-template-columns:1fr; }
+  .monaco-editor { height:330px; }
+  .submission-filters,.submission-toolbar { align-items:stretch; }
+  .submission-filters label,.submission-toolbar label { flex:1 1 100%; }
+}

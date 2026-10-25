@@ -6,6 +6,8 @@
   "scripts": {
     "start": "node local-server.cjs",
     "test": "node --test",
+    "test:live": "node scripts/verify-live-judge.js --live",
+    "test:e2e": "node scripts/e2e-local-platform.js --live",
     "import:questions": "node scripts/import-questions.js",
     "generate:sets": "node scripts/generate-sets.js"
   }
