@@ -1,0 +1,12 @@
+{
+  "1": {
+    "referencePython": "import sys\n\ndata = list(map(int, sys.stdin.buffer.read().split()))\nn = data[0]\na = data[1:1 + n]\nsys.stdout.write(''.join(f'{i} -> {value}\\n' for i, value in enumerate(a)))\n",
+    "incorrectPython": "import sys\n\ndata = list(map(int, sys.stdin.buffer.read().split()))\nn = data[0]\na = data[1:1 + n]\nsys.stdout.write(''.join(f'{i + 1} -> {value}\\n' for i, value in enumerate(a)))\n",
+    "mutationRationale": "The incorrect program uses one-based positions instead of the required zero-based indices; every case catches the shift."
+  },
+  "2": {
+    "referencePython": "import sys\n\ndata = list(map(int, sys.stdin.buffer.read().split()))\nn = data[0]\narr = data[1:1 + n]\nprint(f\"First = {arr[0]}\")\nprint(f\"Last  = {arr[n - 1]}\")\n",
+    "incorrectPython": "import sys\n\ndata = list(map(int, sys.stdin.buffer.read().split()))\nn = data[0]\narr = data[1:1 + n]\nprint(f\"First = {arr[0]}\")\nprint(f\"Last  = {arr[n - 2]}\")\n",
+    "mutationRationale": "The incorrect program uses n - 2 and prints the penultimate element; the hidden two-element case catches the off-by-one."
+  }
+}

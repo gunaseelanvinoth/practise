@@ -162,7 +162,7 @@ Both commands explicitly opt in to external code execution. They use disposable 
 
 ## ⚠️ Notes
 
-- **Question data coverage** — ten existing questions (IDs 3, 5, 6, 13, 14, 15, 17, 18, 22 and 25) have authored input/output formats, two visible samples and three hidden tests each. The remaining legacy questions are retained, but require properly specified stdin/stdout formats and cases in the admin dashboard before they can be automatically judged; their old example text is not silently treated as executable tests.
+- **Question data coverage** — twelve existing questions (IDs 1, 2, 3, 5, 6, 13, 14, 15, 17, 18, 22 and 25) have authored input/output formats, visible samples and question-specific hidden tests. The other legacy questions are retained; coverage is being completed from their actual problem statements rather than treating fixed tutorial examples as executable tests.
 - **Judge0 public instance** may have rate limits. For heavy use, provision your own Judge0 instance.
 - **Local data** is stored in `data/state.json` (created automatically, git-ignored).
 - **Production data** requires Upstash Redis. The platform shows a clear error if the database is not configured.

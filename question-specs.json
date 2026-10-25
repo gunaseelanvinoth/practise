@@ -1,4 +1,70 @@
 {
+  "1": {
+    "inputFormat": "One case. The first token is integer n, the number of array elements. The next n whitespace-separated tokens are signed integers a[0] through a[n-1]. Tokens may be separated by spaces or newlines; there is no additional input.",
+    "outputFormat": "For each element, in original array order, print one line exactly as `index -> value`, using zero-based indices from 0 through n-1. Print no other text.",
+    "constraints": "1 <= n <= 100000; -1000000000 <= a[i] <= 1000000000 for every i. The array is nonempty. Each input contains exactly one case. Output order is the original left-to-right array order, and indices are zero-based as in the question's example and pseudocode.",
+    "sampleTests": [
+      {
+        "input": "7\n14 3 21 8 17 6 11\n",
+        "expectedOutput": "0 -> 14\n1 -> 3\n2 -> 21\n3 -> 8\n4 -> 17\n5 -> 6\n6 -> 11\n"
+      },
+      {
+        "input": "1\n-42\n",
+        "expectedOutput": "0 -> -42\n"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "5\n-9 -1 -9 0 12\n",
+        "expectedOutput": "0 -> -9\n1 -> -1\n2 -> -9\n3 -> 0\n4 -> 12\n"
+      },
+      {
+        "input": "6\n7 7 7 7 7 7\n",
+        "expectedOutput": "0 -> 7\n1 -> 7\n2 -> 7\n3 -> 7\n4 -> 7\n5 -> 7\n"
+      },
+      {
+        "input": "4\n1000000000 -1000000000 23 -5\n",
+        "expectedOutput": "0 -> 1000000000\n1 -> -1000000000\n2 -> 23\n3 -> -5\n"
+      },
+      {
+        "input": "8\n0 -1 1 0 -1 1 0 -1\n",
+        "expectedOutput": "0 -> 0\n1 -> -1\n2 -> 1\n3 -> 0\n4 -> -1\n5 -> 1\n6 -> 0\n7 -> -1\n"
+      }
+    ]
+  },
+  "2": {
+    "inputFormat": "One case: the first line contains integer n, the number of array elements. The next line(s) contain exactly n space-separated integers a[0] through a[n-1].",
+    "outputFormat": "Print exactly two lines: `First = x` where x is a[0], then `Last  = y` where the second label has two spaces between `Last` and `=` as shown in the bank example. Print no other text.",
+    "constraints": "1 <= n <= 100000; -1000000000 <= a[i] <= 1000000000 for every i. The array is nonempty. Whitespace and line breaks may separate the n integer values arbitrarily.",
+    "sampleTests": [
+      {
+        "input": "7\n14 3 21 8 17 6 11\n",
+        "expectedOutput": "First = 14\nLast  = 11\n"
+      },
+      {
+        "input": "1\n-42\n",
+        "expectedOutput": "First = -42\nLast  = -42\n"
+      }
+    ],
+    "hiddenTests": [
+      {
+        "input": "2\n5 -9\n",
+        "expectedOutput": "First = 5\nLast  = -9\n"
+      },
+      {
+        "input": "6\n0 7 0 7 0 7\n",
+        "expectedOutput": "First = 0\nLast  = 7\n"
+      },
+      {
+        "input": "5\n-1000000000 18 18 -3 1000000000\n",
+        "expectedOutput": "First = -1000000000\nLast  = 1000000000\n"
+      },
+      {
+        "input": "4\n23 -100 8 -100\n",
+        "expectedOutput": "First = 23\nLast  = -100\n"
+      }
+    ]
+  },
   "3": {
     "inputFormat": "The first line contains n. The second line contains n space-separated integers.",
     "outputFormat": "Print the sum of the n integers.",
